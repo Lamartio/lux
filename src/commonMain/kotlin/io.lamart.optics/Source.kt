@@ -1,63 +1,44 @@
-@file:Suppress("NON_EXPORTABLE_TYPE", "OPT_IN_USAGE")
-@file:JsExport
-
 package io.lamart.optics
 
-import kotlin.js.JsExport
-import kotlin.js.JsName
+sealed class Source<T>(open val modify: ((T) -> T) -> Unit) {
 
-sealed class Source<F>(open val set: (F) -> Unit) {
-
-    fun getOr(): Option<F> =
-        when (this) {
-            is Certain -> optionOf(get())
-            is Uncertain -> get()
-        }
-
-    fun modify(with: (F) -> F) {
-        getOr()
-            .map(with)
-            .map(set)
-    }
-
-    operator fun component3(): (with: (F) -> F) -> Unit = ::modify
-
-    fun <R> fold(ifCertain: (certain: Certain<F>) -> R, ifUncertain: (uncertain: Uncertain<F>) -> R): R =
-        when (this) {
-            is Certain -> ifCertain(this)
-            is Uncertain -> ifUncertain(this)
-        }
-
-    data class Certain<F>(val get: () -> F, override val set: (F) -> Unit) : Source<F>(set) {
-        @JsName("composeLens")
-        fun <R> compose(lens: Optic.Lens<F, R>): Certain<R> =
+    data class Certain<T>(val get: () -> T, val set: (T) -> Unit) : Source<T>({ get().let(it).let(set) }) {
+        fun <R> compose(lens: Optic.Lens<T, R>): Certain<R> =
             Certain(
                 get = { get().let(lens.select) },
-                set = { r -> get().let { f -> lens.clone(f, r) }.let(set) }
+                set = { r -> get().let { t -> lens.clone(t, r) }.let(set) }
             )
 
-        @JsName("composeMask")
-        fun <R> compose(mask: Optic.Mask<F, R>): Uncertain<R> =
+        fun <R> compose(mask: Optic.Mask<T, R>): Uncertain<R> =
             Uncertain(
                 get = { mask.select(get()) },
-                set = { r -> get().let { f -> mask.clone(f, r) }.let(set) }
+                set = { r -> get().let { t -> mask.clone(t, r) }.let(set) }
             )
     }
 
-    data class Uncertain<F>(val get: () -> Option<F>, override val set: (F) -> Unit) : Source<F>(set) {
-        @JsName("composeLens")
-        fun <R> compose(lens: Optic.Lens<F, R>): Uncertain<R> =
+    data class Uncertain<T>(val get: () -> Option<T>, val set: (T) -> Unit) : Source<T>({ get().map(it).map(set) }) {
+
+        fun <R> compose(lens: Optic.Lens<T, R>): Uncertain<R> =
             Uncertain(
                 get = { get().map(lens.select) },
-                set = { r -> get().map { f -> lens.clone(f, r) }.map(set) }
+                set = { r -> get().map { t -> lens.clone(t, r) }.map(set) }
             )
 
-        @JsName("composeMask")
-        fun <R> compose(mask: Optic.Mask<F, R>): Uncertain<R> =
+        fun <R> compose(mask: Optic.Mask<T, R>): Uncertain<R> =
             Uncertain(
                 get = { get().flatMap(mask.select) },
-                set = { r -> get().map { f -> mask.clone(f, r) }.map(set) }
+                set = { r -> get().map { t -> mask.clone(t, r) }.map(set) }
             )
+
+        fun <R> compose(test: Optic.Test<T, R>): Traversal<R> {
+            return Traversal(
+                get = { get().map(test.transform).get(emptySequence()) },
+                modify = { transform ->
+                    get().map(test.transform).get(emptySequence()).map(transform).let { set(it) }
+                }
+            )
+        }
     }
+    data class Traversal<T>(val get: () -> Sequence<T>, override val modify: ((T) -> T) -> Unit) : Source<T>(modify)
 
 }

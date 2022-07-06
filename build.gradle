@@ -2,6 +2,8 @@ plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.7.0'
 }
 
+//apply plugin: 'kotlin-kapt'
+
 group = 'io.lamart'
 version = '1.0-SNAPSHOT'
 
@@ -9,6 +11,7 @@ repositories {
     mavenCentral()
 }
 
+def arrow_version = "1.0.1"
 kotlin {
     jvm {
         compilations.all {
@@ -37,7 +40,10 @@ kotlin {
     }
     sourceSets {
         commonMain {
-
+            dependencies {
+                implementation "io.arrow-kt:arrow-optics:$arrow_version"
+//                kapt "io.arrow-kt:arrow-meta:$arrow_version"
+            }
         }
         commonTest {
             dependencies {

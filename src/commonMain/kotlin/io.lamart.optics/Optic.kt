@@ -3,12 +3,7 @@ package io.lamart.optics
 import kotlin.js.JsName
 
 sealed class Optic<S, F> {
-
-    fun <R> fold(ifLens: (lens: Lens<S, F>) -> R, ifMask: (mask: Mask<S, F>) -> R): R =
-        when (this) {
-            is Lens -> ifLens(this)
-            is Mask -> ifMask(this)
-        }
+    data class Test<S, F>(val transform: (S) -> Sequence<F>) : Optic<S, S>()
 
     data class Lens<S, F>(val select: S.() -> F, val clone: S.(focus: F) -> S) : Optic<S, F>() {
 
@@ -58,7 +53,6 @@ sealed class Optic<S, F> {
                 }
             )
     }
-
 
 
 }

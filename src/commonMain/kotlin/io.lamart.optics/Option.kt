@@ -20,7 +20,7 @@ sealed class Option<T> {
             is Some -> transform(value)
         }
 
-    operator fun get(or: T): T =
+    fun get(or: T): T =
         when (this) {
             is None -> or
             is Some -> value
