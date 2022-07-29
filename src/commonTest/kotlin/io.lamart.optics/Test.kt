@@ -1,4 +1,4 @@
-package io.lamart.optics
+`package io.lamart.optics
 
 import arrow.optics.Lens
 import arrow.optics.PLens
