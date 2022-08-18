@@ -12,6 +12,8 @@ interface SourcedLens<S, A> : Sourced<S>, SourcedOptional<S, A>, SourcedGetter<S
     override fun getOrModify(): Either<S, A> =
         Either.Right(get())
 
+    infix fun <B> compose(other: Lens<A, B>): SourcedLens<S, B> =
+        SourcedLens(source, lens.compose(other))
     companion object
 }
 

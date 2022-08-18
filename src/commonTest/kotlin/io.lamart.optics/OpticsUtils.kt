@@ -1,9 +1,11 @@
 package io.lamart.optics
 
-import arrow.core.*
+import arrow.core.Either
+import arrow.core.Option
+import arrow.core.firstOrNone
 import arrow.optics.*
-import io.lamart.optics.sourced.Source
-import io.lamart.optics.sourced.invoke
+import io.lamart.optics.source.Source
+import io.lamart.optics.source.invoke
 
 operator fun <S, A> PLens.Companion.get(get: S.() -> A, set: S.(A) -> S): Lens<S, A> = invoke(get, set)
 

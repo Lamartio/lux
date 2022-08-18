@@ -5,14 +5,7 @@ import arrow.optics.Lens
 import arrow.optics.Optional
 import arrow.optics.Traversal
 import io.lamart.optics.async.Async
-import io.lamart.optics.async.exhausting
-import io.lamart.optics.async.switching
-import io.lamart.optics.async.toAsyncActions
-import io.lamart.optics.sourced.SourcedSetter
-import io.lamart.optics.sourced.component1
-import io.lamart.optics.sourced.component2
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import io.lamart.optics.async.idle
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -21,7 +14,7 @@ data class State(
     val persons: List<Person> = listOf(Person(name = "Danny", age = 31), Person(name = "Petra")),
     val randomPersons: Collection<Person> = setOf(Person(name = "Danny", age = 31), Person(name = "Petra")),
     val auth: Auth? = Auth.NotSignedIn,
-    val signingIn: Async<Person> = Async.idle()
+    val signingIn: Async<Person> = idle()
 ) {
     companion object {
         val person: Lens<State, Person> = Lens[{ person }, { copy(person = it) }]
@@ -45,13 +38,12 @@ class Arrow {
     @Test
     fun test1() {
         val results = mutableListOf(State())
-
-        val (_, setName) = results
+        val name = results
             .toSource()
             .compose(Lens[{ person }, { copy(person = it) }])
             .compose(Lens[{ name }, { copy(name = it) }])
 
-        setName("Danny!!!")
+        name.set("Danny!!!")
 
         assertEquals(2, results.size)
         assertEquals("Danny", results[0].person.name)

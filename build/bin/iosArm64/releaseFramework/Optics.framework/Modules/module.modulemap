@@ -1,8 +1,0 @@
-framework module Optics {
-    umbrella header "Optics.h"
-
-    export *
-    module * { export * }
-
-    use Foundation
-}

@@ -23,6 +23,9 @@ interface SourcedOptional<S, A> : Sourced<S>, SourcedSetter<S, A> {
     fun modifyNullable(map: (focus: A) -> A): S? =
         optional.modifyNullable(source.get(), map)
 
+    infix fun <B> compose(other: Optional<A, B>): SourcedOptional<S, B> =
+        SourcedOptional(source, optional.compose(other))
+
     companion object
 }
 

@@ -1,21 +1,22 @@
 package io.lamart.optics.async
 
-import io.lamart.optics.sourced.SourcedSetter
+import io.lamart.optics.identity
+import io.lamart.optics.source.SourcedSetter
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-class AsyncActions<P, T>(
-    private val source: SourcedSetter<*, Async<T>>,
-    private val strategy: Strategy<P, T>,
-    private val scope: CoroutineScope = GlobalScope,
-    private val effect: (Async<T>) -> Unit = {}
+class AsyncActions<P, T> internal constructor(
+    val source: SourcedSetter<*, Async<T>>,
+    val behavior: AsyncBehavior<P, T>,
+    val scope: CoroutineScope,
+    val effect: (output: Flow<Async<T>>) -> Flow<*>,
+    val emit: suspend (P) -> Unit,
+    val getFlow: () -> Flow<P>
 ) {
-
-    private val flow = MutableSharedFlow<P>()
-    private var job: Job = scope.async(start = CoroutineStart.LAZY, block = {}).apply { cancel() }
+    private var job: Job = scope.launch(start = CoroutineStart.LAZY, block = {}).apply { cancel() }
 
     fun cancel() {
-        val reason = Cancelled()
+        val reason = BehaviorCancelled()
 
         if (job.isActive)
             job.cancel(reason)
@@ -28,30 +29,29 @@ class AsyncActions<P, T>(
             source.set(idle())
     }
 
-    fun next(payload: P) {
+    fun execute(payload: P) {
         if (scope.isActive) {
-            if (!job.isActive)
-                job = launch()
-
-            flow.tryEmit(payload)
+            if (job.isActive) {
+                scope.launch {
+                    emit(payload)
+                }
+            } else {
+                job = getFlow()
+                    .onStart { emit(payload) }
+                    .let(behavior)
+                    .onEach(source::set)
+                    .let(effect)
+                    .launchIn(scope)
+            }
         }
     }
 
-    private fun launch(): Job =
-        flow
-            .strategy()
-            .map(::success)
-            .catch { emit(failure(it)) }
-            .onStart { emit(executing()) }
-            .onEach(source::set)
-            .onEach(effect)
-            .launchIn(scope)
-
-    class Cancelled : CancellationException("User cancelled current strategy")
+    class BehaviorCancelled internal constructor(): CancellationException("User cancelled current behavior")
 }
 
 fun <P, T> SourcedSetter<*, Async<T>>.toAsyncActions(
-    strategy: Strategy<P, T>,
+    behavior: AsyncBehavior<P, T>,
     scope: CoroutineScope = GlobalScope,
-    effect: (Async<T>) -> Unit = {}
-): AsyncActions<P, T> = AsyncActions(this, strategy, scope, effect)
+    effect: (output: Flow<Async<T>>) -> Flow<*> = ::identity
+): AsyncActions<P, T> =
+    MutableSharedFlow<P>().let { flow -> AsyncActions(this, behavior, scope, effect, flow::emit, flow::asSharedFlow) }

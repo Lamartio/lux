@@ -13,6 +13,9 @@ interface SourcedSetter<S, A> : Sourced<S> {
     fun lift(map: (focus: A) -> A): () -> S =
         { setter.lift(map).invoke(source.get()).also(source::set) }
 
+     infix fun <B> compose(other: Setter<A, B>): SourcedSetter<S, B> =
+         SourcedSetter(source, setter.compose(other))
+
     companion object
 }
 

@@ -8,6 +8,9 @@ interface SourcedGetter<S, A> : Sourced<S> {
     fun get(): A =
         getter.get(source.get())
 
+    infix fun <B> compose(other: Getter<in A, out B>): SourcedGetter<S, B> =
+        SourcedGetter(source, getter.compose(other))
+
     companion object
 }
 

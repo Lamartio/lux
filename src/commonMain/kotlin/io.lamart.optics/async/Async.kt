@@ -1,6 +1,18 @@
 package io.lamart.optics.async
 
-sealed class Async<out T>
+sealed class Async<out T> {
+}
+
+val Async<*>.isSuccess: Boolean
+    get() = when (this) {
+        is Success -> true
+        else -> false
+    }
+val Async<*>.isExecuting: Boolean
+    get() = when (this) {
+        is Executing -> true
+        else -> false
+    }
 
 fun <T> idle(): Async<T> = Idle
 fun <T> executing(): Async<T> = Executing
