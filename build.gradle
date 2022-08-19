@@ -34,7 +34,6 @@ kotlin {
         binaries {
             framework {
                 baseName = 'Optics'
-//                freeCompilerArgs += "-Xno-objc-generics"
             }
         }
     }
@@ -50,24 +49,6 @@ kotlin {
                 implementation kotlin('test')
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
             }
-        }
-        jvmMain {
-
-        }
-        jvmTest {
-
-        }
-        jsMain {
-
-        }
-        jsTest {
-
-        }
-        iosMain {
-
-        }
-        iosTest {
-
         }
     }
 }
