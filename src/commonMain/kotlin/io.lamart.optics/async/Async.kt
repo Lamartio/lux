@@ -8,6 +8,11 @@ val Async<*>.isSuccess: Boolean
         is Success -> true
         else -> false
     }
+val Async<*>.isFailure: Boolean
+    get() = when (this) {
+        is Failure -> true
+        else -> false
+    }
 val Async<*>.isExecuting: Boolean
     get() = when (this) {
         is Executing -> true
