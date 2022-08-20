@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AsyncActionsTests {
+class ActionsTests {
 
     data class State<T>(val state: io.lamart.optics.async.State<T> = idle()) {
 

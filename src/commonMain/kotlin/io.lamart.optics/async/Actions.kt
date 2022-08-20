@@ -12,7 +12,7 @@ class Actions<P, T> internal constructor(
     val emit: suspend (P) -> Unit,
     val getFlow: () -> Flow<P>
 ) {
-    private var job: Job = scope.launch(start = CoroutineStart.LAZY, block = {}).apply { cancel() }
+    private var job: Job = Job().apply { cancel() }
 
     fun cancel() {
         if (scope.isActive and job.isActive) {
@@ -39,9 +39,7 @@ class Actions<P, T> internal constructor(
                     .onStart { payloads.forEach { emit(it) } }
                     .let(behavior)
                     .onEach(source::set)
-                    .let {
-                        effect(scope, it)
-                    }
+                    .let { effect(scope, it) }
                     .launchIn(scope)
             }
         }

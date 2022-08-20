@@ -9,7 +9,7 @@ import io.lamart.optics.async.idle
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-data class State(
+data class TestState(
     val person: Person = Person(),
     val persons: List<Person> = listOf(Person(name = "Danny", age = 31), Person(name = "Petra")),
     val randomPersons: Collection<Person> = setOf(Person(name = "Danny", age = 31), Person(name = "Petra")),
@@ -17,8 +17,8 @@ data class State(
     val signingIn: State<Person> = idle()
 ) {
     companion object {
-        val person: Lens<State, Person> = Lens[{ person }, { copy(person = it) }]
-        val persons = Lens.get<State, List<Person>>({ persons }, { copy(persons = it) })
+        val person: Lens<TestState, Person> = Lens[{ person }, { copy(person = it) }]
+        val persons = Lens.get<TestState, List<Person>>({ persons }, { copy(persons = it) })
     }
 }
 
@@ -37,7 +37,7 @@ class Arrow {
 
     @Test
     fun test1() {
-        val results = mutableListOf(State())
+        val results = mutableListOf(TestState())
         val name = results
             .toSource()
             .compose(Lens[{ person }, { copy(person = it) }])
@@ -52,9 +52,9 @@ class Arrow {
 
     @Test
     fun test2() {
-        val first = State()
-        val second = State.person.compose(Person.name).set(first, "ynnaD")
-        val third = State.person.compose(Person.name).modify(first) { "$it!!!" }
+        val first = TestState()
+        val second = TestState.person.compose(Person.name).set(first, "ynnaD")
+        val third = TestState.person.compose(Person.name).modify(first) { "$it!!!" }
 
         assertEquals("Danny", first.person.name)
         assertEquals("ynnaD", second.person.name)
@@ -63,9 +63,9 @@ class Arrow {
 
     @Test
     fun test3() {
-        val first = State()
-        val second = State.person.compose(Person.name).set(first, "ynnaD")
-        val third = State.person.compose(Person.name).modify(first) { "$it!!!" }
+        val first = TestState()
+        val second = TestState.person.compose(Person.name).set(first, "ynnaD")
+        val third = TestState.person.compose(Person.name).modify(first) { "$it!!!" }
 
         assertEquals("Danny", first.person.name)
         assertEquals("ynnaD", second.person.name)
@@ -74,22 +74,22 @@ class Arrow {
 
     @Test
     fun test4() {
-        val results = mutableListOf(State())
+        val results = mutableListOf(TestState())
         val source = results.toSource()
 
         assertEquals("Danny", source.get().person.name)
-        source.set(State(person = Person(name = "ynnaD")))
+        source.set(TestState(person = Person(name = "ynnaD")))
         assertEquals("ynnaD", source.get().person.name)
 
-        source.compose(State.person).compose(Person.name).set("Danny!!!")
+        source.compose(TestState.person).compose(Person.name).set("Danny!!!")
         assertEquals("Danny!!!", source.get().person.name)
         assertEquals(3, results.size)
     }
 
     @Test
     fun test5() {
-        val first = State()
-        val second = State
+        val first = TestState()
+        val second = TestState
             .persons
             .compose(Every.list())
             .compose(Person.name)
@@ -100,18 +100,18 @@ class Arrow {
 
     @Test
     fun test6() {
-        val first = State()
-        val second = State
+        val first = TestState()
+        val second = TestState
             .persons
             .compose(Traversal { source, map -> source.map(map) })
             .compose(Person.name)
             .set(first, "Danny!!!")
-        val third = State
+        val third = TestState
             .persons
             .compose(Every.list { it.age != null })
             .compose(Person.name)
             .modify(first, String::reversed)
-        val fourth = State
+        val fourth = TestState
             .persons
             .compose(Optional.first { it.age == null })
             .compose(Person.name)

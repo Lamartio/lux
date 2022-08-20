@@ -1,7 +1,6 @@
 package io.lamart.optics.async
 
-sealed class State<out T> {
-}
+sealed class State<out T>
 
 val State<*>.isSuccess: Boolean
     get() = when (this) {
