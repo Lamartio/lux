@@ -1,7 +1,7 @@
 package io.lamart.optics
 
 import io.lamart.optics.async.Effect
-import io.lamart.optics.async.effect
+import io.lamart.optics.async.effectOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -67,7 +67,7 @@ class EffectTests {
         val scope = this + Job() + Dispatchers.Unconfined
         val elements = listOf(1, 2)
         val flow = elements.asFlow().shareIn(this, SharingStarted.Lazily)
-        val effect: Effect<Int> = effect(
+        val effect: Effect<Int> = effectOf(
             testEffect(elements.size, results),
             testEffect(elements.size, results),
         )

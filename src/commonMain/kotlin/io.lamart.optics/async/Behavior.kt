@@ -3,42 +3,42 @@ package io.lamart.optics.async
 import kotlinx.coroutines.flow.*
 import kotlin.jvm.JvmName
 
-typealias AsyncBehavior<P, T> = (input: Flow<P>) -> Flow<Async<T>>
+typealias Behavior<P, T> = (input: Flow<P>) -> Flow<State<T>>
 
 @JvmName("concattingSuspension")
-fun <P, T> concatting(suspension: suspend (P) -> T): AsyncBehavior<P, T> =
+fun <P, T> concatting(suspension: suspend (P) -> T): Behavior<P, T> =
     concatting(flow = { flowOf(suspension(it)) })
 
 @JvmName("concattingFlow")
-fun <P, T> concatting(flow: suspend (P) -> Flow<T>): AsyncBehavior<P, T> =
-    asyncBehaviorOf { flatMapConcat(flow) }
+fun <P, T> concatting(flow: suspend (P) -> Flow<T>): Behavior<P, T> =
+    behaviorOf { flatMapConcat(flow) }
 
 @JvmName("mergingSuspension")
-fun <P, T> merging(suspension: suspend (P) -> T): AsyncBehavior<P, T> =
+fun <P, T> merging(suspension: suspend (P) -> T): Behavior<P, T> =
     merging(flow = { flowOf(suspension(it)) })
 
 @JvmName("mergingFlow")
-fun <P, T> merging(flow: suspend (P) -> Flow<T>): AsyncBehavior<P, T> =
-    asyncBehaviorOf { flatMapMerge(transform = flow) }
+fun <P, T> merging(flow: suspend (P) -> Flow<T>): Behavior<P, T> =
+    behaviorOf { flatMapMerge(transform = flow) }
 
 @JvmName("switchingSuspension")
-fun <P, T> switching(suspension: suspend (P) -> T): AsyncBehavior<P, T> =
+fun <P, T> switching(suspension: suspend (P) -> T): Behavior<P, T> =
     switching(flow = { flowOf(suspension(it)) })
 
 @JvmName("switchingFlow")
-fun <P, T> switching(flow: suspend (P) -> Flow<T>): AsyncBehavior<P, T> =
-    asyncBehaviorOf { flatMapLatest(flow) }
+fun <P, T> switching(flow: suspend (P) -> Flow<T>): Behavior<P, T> =
+    behaviorOf { flatMapLatest(flow) }
 
 @JvmName("exhaustingSuspension")
-fun <P, T> exhausting(suspension: suspend (P) -> T): AsyncBehavior<P, T> =
+fun <P, T> exhausting(suspension: suspend (P) -> T): Behavior<P, T> =
     exhausting(flow = { flowOf(suspension(it)) })
 
 @JvmName("exhaustingFlow")
-fun <P, T> exhausting(flow: suspend (P) -> Flow<T>): AsyncBehavior<P, T> =
-    asyncBehaviorOf {
+fun <P, T> exhausting(flow: suspend (P) -> Flow<T>): Behavior<P, T> =
+    behaviorOf {
         val isBusy = MutableStateFlow(false)
 
-        this@asyncBehaviorOf
+        this@behaviorOf
             .filter { !isBusy.getAndUpdate { true } }
             .flatMapMerge(
                 concurrency = 1,
@@ -46,7 +46,7 @@ fun <P, T> exhausting(flow: suspend (P) -> Flow<T>): AsyncBehavior<P, T> =
             )
     }
 
-fun <P, T> asyncBehaviorOf(block: Flow<P>.() -> Flow<T>): AsyncBehavior<P, T> {
+fun <P, T> behaviorOf(block: Flow<P>.() -> Flow<T>): Behavior<P, T> {
     return { input ->
         input
             .run(block)

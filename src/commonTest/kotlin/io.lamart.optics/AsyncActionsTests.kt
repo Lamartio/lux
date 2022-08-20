@@ -17,13 +17,13 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class AsyncActionsTests {
 
-    data class State<T>(val async: Async<T> = idle()) {
+    data class State<T>(val state: io.lamart.optics.async.State<T> = idle()) {
 
         companion object {
-            fun <T> test(): Pair<List<State<T>>, SourcedLens<State<T>, Async<T>>> {
+            fun <T> test(): Pair<List<State<T>>, SourcedLens<State<T>, io.lamart.optics.async.State<T>>> {
                 val results = mutableListOf(State<T>())
                 val source = Source(get = results::last, set = results::add)
-                val async = source.compose(PLens({ it.async }, { s, f -> s.copy(async = f) }))
+                val async = source.compose(PLens({ it.state }, { s, f -> s.copy(state = f) }))
 
                 return results to async
             }
@@ -32,7 +32,7 @@ class AsyncActionsTests {
 
     @Test
     fun synchronousBehaviorShouldProduceEqualResults() = runTest {
-        val behaviors = listOf<AsyncBehavior<Int, Int>>(
+        val behaviors = listOf<Behavior<Int, Int>>(
             merging(suspension = ::identity),
             concatting(suspension = ::identity),
             switching(suspension = ::identity),
@@ -55,11 +55,11 @@ class AsyncActionsTests {
     @Test
     fun executeSinglePayload() = runTest {
         val (states, lens) = State.test<Int>()
-        val actions = AsyncActions(
+        val actions = Actions(
             source = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
-            effect = effect(),
+            effect = effectOf(),
             emit = { },
             getFlow = ::emptyFlow
         )
@@ -68,7 +68,7 @@ class AsyncActionsTests {
         advanceUntilIdle()
 
         assertEquals(
-            expected = states.map { it.async },
+            expected = states.map { it.state },
             actual = listOf(
                 idle(),
                 executing(),
@@ -80,11 +80,11 @@ class AsyncActionsTests {
     @Test
     fun executeMultiplePayloads() = runTest {
         val (states, lens) = State.test<Int>()
-        val actions = AsyncActions(
+        val actions = Actions(
             source = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
-            effect = effect(),
+            effect = effectOf(),
             emit = { },
             getFlow = ::emptyFlow
         )
@@ -93,7 +93,7 @@ class AsyncActionsTests {
         advanceUntilIdle()
 
         assertEquals(
-            expected = states.map { it.async },
+            expected = states.map { it.state },
             actual = listOf(
                 idle(),
                 executing(),
@@ -109,11 +109,11 @@ class AsyncActionsTests {
         val (states, lens) = State.test<Int>()
         val times = 3
         val flow = MutableSharedFlow<Int>()
-        val actions = AsyncActions(
+        val actions = Actions(
             source = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
-            effect = effect(),
+            effect = effectOf(),
             emit = flow::emit,
             getFlow = { flow.take(times-1) }
         )
@@ -122,7 +122,7 @@ class AsyncActionsTests {
         advanceUntilIdle()
 
         assertEquals(
-            expected = states.map { it.async },
+            expected = states.map { it.state },
             actual = listOf(
                 idle(),
                 executing(),
@@ -136,8 +136,8 @@ class AsyncActionsTests {
     @Test
     fun checkEffect() = runTest {
         val (states, lens) = State.test<Int>()
-        val effects = mutableListOf<Async<Int>>()
-        val actions = AsyncActions(
+        val effects = mutableListOf<io.lamart.optics.async.State<Int>>()
+        val actions = Actions(
             source = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
@@ -150,7 +150,7 @@ class AsyncActionsTests {
         advanceUntilIdle()
 
         assertEquals(
-            states.map { it.async }.drop(1), // drop the default state
+            states.map { it.state }.drop(1), // drop the default state
             effects
         )
     }

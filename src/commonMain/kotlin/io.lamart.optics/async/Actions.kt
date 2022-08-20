@@ -4,11 +4,11 @@ import io.lamart.optics.source.SourcedSetter
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-class AsyncActions<P, T> internal constructor(
-    val source: SourcedSetter<*, Async<T>>,
-    val behavior: AsyncBehavior<P, T>,
+class Actions<P, T> internal constructor(
+    val source: SourcedSetter<*, State<T>>,
+    val behavior: Behavior<P, T>,
     val scope: CoroutineScope,
-    val effect: Effect<Async<T>>,
+    val effect: Effect<State<T>>,
     val emit: suspend (P) -> Unit,
     val getFlow: () -> Flow<P>
 ) {
@@ -57,10 +57,10 @@ class AsyncActions<P, T> internal constructor(
     }
 }
 
-fun <P, T> SourcedSetter<*, Async<T>>.toAsyncActions(
-    behavior: AsyncBehavior<P, T>,
+fun <P, T> SourcedSetter<*, State<T>>.toAsyncActions(
+    behavior: Behavior<P, T>,
     scope: CoroutineScope = GlobalScope,
-    effect: Effect<Async<T>> = { TODO() }
-): AsyncActions<P, T> =
-    MutableSharedFlow<P>().let { flow -> AsyncActions(this, behavior, scope, effect, flow::emit, flow::asSharedFlow) }
+    effect: Effect<State<T>> = effectOf()
+): Actions<P, T> =
+    MutableSharedFlow<P>().let { flow -> Actions(this, behavior, scope, effect, flow::emit, flow::asSharedFlow) }
 

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.shareIn
 
 typealias Effect<T> = CoroutineScope.(output: Flow<T>) -> Flow<*>
 
-fun <T> effect(vararg effects: Effect<T>): Effect<T> {
+fun <T> effectOf(vararg effects: Effect<T>): Effect<T> {
     return when (effects.size) {
         0 -> { output -> output }
         1 -> effects[0]
