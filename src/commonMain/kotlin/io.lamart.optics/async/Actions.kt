@@ -5,10 +5,10 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 class Actions<P, T> internal constructor(
-    val source: SourcedSetter<*, State<T>>,
+    val source: SourcedSetter<*, Async<T>>,
     val behavior: Behavior<P, T>,
     val scope: CoroutineScope,
-    val effect: Effect<State<T>>,
+    val effect: Effect<Async<T>>,
     val emit: suspend (P) -> Unit,
     val getFlow: () -> Flow<P>
 ) {
@@ -55,10 +55,10 @@ class Actions<P, T> internal constructor(
     }
 }
 
-fun <P, T> SourcedSetter<*, State<T>>.toAsyncActions(
+fun <P, T> SourcedSetter<*, Async<T>>.toAsyncActions(
     behavior: Behavior<P, T>,
     scope: CoroutineScope = GlobalScope,
-    effect: Effect<State<T>> = effectOf()
+    effect: Effect<Async<T>> = effectOf()
 ): Actions<P, T> =
     MutableSharedFlow<P>().let { flow -> Actions(this, behavior, scope, effect, flow::emit, flow::asSharedFlow) }
 

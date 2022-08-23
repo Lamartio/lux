@@ -3,7 +3,7 @@ package io.lamart.optics.async
 import kotlinx.coroutines.flow.*
 import kotlin.jvm.JvmName
 
-typealias Behavior<P, T> = (input: Flow<P>) -> Flow<State<T>>
+typealias Behavior<P, T> = (input: Flow<P>) -> Flow<Async<T>>
 
 @JvmName("concattingSuspension")
 fun <P, T> concatting(suspension: suspend (P) -> T): Behavior<P, T> =

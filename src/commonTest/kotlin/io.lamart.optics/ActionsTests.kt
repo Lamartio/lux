@@ -17,13 +17,13 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class ActionsTests {
 
-    data class State<T>(val state: io.lamart.optics.async.State<T> = idle()) {
+    data class State<T>(val async: io.lamart.optics.async.Async<T> = idle()) {
 
         companion object {
-            fun <T> test(): Pair<List<State<T>>, SourcedLens<State<T>, io.lamart.optics.async.State<T>>> {
+            fun <T> test(): Pair<List<State<T>>, SourcedLens<State<T>, io.lamart.optics.async.Async<T>>> {
                 val results = mutableListOf(State<T>())
                 val source = Source(get = results::last, set = results::add)
-                val async = source.compose(PLens({ it.state }, { s, f -> s.copy(state = f) }))
+                val async = source.compose(PLens({ it.async }, { s, f -> s.copy(async = f) }))
 
                 return results to async
             }
@@ -68,7 +68,7 @@ class ActionsTests {
         advanceUntilIdle()
 
         assertEquals(
-            expected = states.map { it.state },
+            expected = states.map { it.async },
             actual = listOf(
                 idle(),
                 executing(),
@@ -93,7 +93,7 @@ class ActionsTests {
         advanceUntilIdle()
 
         assertEquals(
-            expected = states.map { it.state },
+            expected = states.map { it.async },
             actual = listOf(
                 idle(),
                 executing(),
@@ -122,7 +122,7 @@ class ActionsTests {
         advanceUntilIdle()
 
         assertEquals(
-            expected = states.map { it.state },
+            expected = states.map { it.async },
             actual = listOf(
                 idle(),
                 executing(),
@@ -136,7 +136,7 @@ class ActionsTests {
     @Test
     fun checkEffect() = runTest {
         val (states, lens) = State.test<Int>()
-        val effects = mutableListOf<io.lamart.optics.async.State<Int>>()
+        val effects = mutableListOf<io.lamart.optics.async.Async<Int>>()
         val actions = Actions(
             source = lens,
             behavior = concatting(suspension = ::identity),
@@ -150,7 +150,7 @@ class ActionsTests {
         advanceUntilIdle()
 
         assertEquals(
-            states.map { it.state }.drop(1), // drop the default state
+            states.map { it.async }.drop(1), // drop the default state
             effects
         )
     }

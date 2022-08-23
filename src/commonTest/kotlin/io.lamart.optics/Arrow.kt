@@ -4,7 +4,7 @@ import arrow.optics.Every
 import arrow.optics.Lens
 import arrow.optics.Optional
 import arrow.optics.Traversal
-import io.lamart.optics.async.State
+import io.lamart.optics.async.Async
 import io.lamart.optics.async.idle
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,7 +14,7 @@ data class TestState(
     val persons: List<Person> = listOf(Person(name = "Danny", age = 31), Person(name = "Petra")),
     val randomPersons: Collection<Person> = setOf(Person(name = "Danny", age = 31), Person(name = "Petra")),
     val auth: Auth? = Auth.NotSignedIn,
-    val signingIn: State<Person> = idle()
+    val signingIn: Async<Person> = idle()
 ) {
     companion object {
         val person: Lens<TestState, Person> = Lens[{ person }, { copy(person = it) }]
