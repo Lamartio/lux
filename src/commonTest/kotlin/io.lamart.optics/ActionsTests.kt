@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class ActionsTests {
 
-    data class State<T>(val state: Async<T> = idle()) {
+    data class State<T>(val state: Async<T> = Async.idle()) {
 
         companion object {
             fun <T> test(): Pair<List<State<T>>, SourcedLens<State<T>, Async<T>>> {
@@ -55,8 +55,8 @@ class ActionsTests {
     @Test
     fun executeSinglePayload() = runTest {
         val (states, lens) = State.test<Int>()
-        val actions = Async.actions(
-            async = lens,
+        val actions = Async.actionsOf(
+            source = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
             effect = effectOf(),
@@ -69,9 +69,9 @@ class ActionsTests {
         assertEquals(
             expected = states.map { it.state },
             actual = listOf(
-                idle(),
-                executing(),
-                success(0)
+                Async.idle(),
+                Async.executing(),
+                Async.success(0)
             )
         )
     }
@@ -79,8 +79,8 @@ class ActionsTests {
     @Test
     fun executeMultiplePayloads() = runTest {
         val (states, lens) = State.test<Int>()
-        val actions = Async.actions(
-            async = lens,
+        val actions = Async.actionsOf(
+            source = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
             effect = effectOf(),
@@ -93,11 +93,11 @@ class ActionsTests {
         assertEquals(
             expected = states.map { it.state },
             actual = listOf(
-                idle(),
-                executing(),
-                success(1),
-                success(2),
-                success(3)
+                Async.idle(),
+                Async.executing(),
+                Async.success(1),
+                Async.success(2),
+                Async.success(3)
             )
         )
     }
@@ -107,8 +107,8 @@ class ActionsTests {
         val (states, lens) = State.test<Int>()
         val times = 3
         val flow = MutableSharedFlow<Int>()
-        val actions = Async.actions(
-            async = lens,
+        val actions = Async.actionsOf(
+            source = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
             effect = effectOf(),
@@ -121,11 +121,11 @@ class ActionsTests {
         assertEquals(
             expected = states.map { it.state },
             actual = listOf(
-                idle(),
-                executing(),
-                success(0),
-                success(1),
-                success(2)
+                Async.idle(),
+                Async.executing(),
+                Async.success(0),
+                Async.success(1),
+                Async.success(2)
             )
         )
     }
@@ -134,8 +134,8 @@ class ActionsTests {
     fun checkEffect() = runTest {
         val (states, lens) = State.test<Int>()
         val effects = mutableListOf<io.lamart.optics.async.Async<Int>>()
-        val actions = Async.actions(
-            async = lens,
+        val actions = Async.actionsOf(
+            source = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
             effect = { it.onEach(effects::add) },

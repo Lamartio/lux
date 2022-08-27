@@ -50,9 +50,9 @@ fun <P, T> behaviorOf(block: Flow<P>.() -> Flow<T>): Behavior<P, T> {
     return { input ->
         input
             .run(block)
-            .map(::success)
-            .onFailure { emit(failure(it)) }
-            .onStart { emit(executing()) }
+            .map { Async.success(it) }
+            .onFailure { emit(Async.failure(it)) }
+            .onStart { emit(Async.executing()) }
     }
 }
 
