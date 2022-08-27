@@ -79,10 +79,4 @@ class EffectTests {
         scope.cancel()
     }
 
-
-    fun test() {
-        val (old, new) = Comparison(1,2)
-
-    }
-
 }

@@ -1,6 +1,8 @@
 package io.lamart.optics.source
 
 import arrow.optics.Setter
+import io.lamart.optics.async.Async
+import io.lamart.optics.async.Stream
 
 interface SourcedSetter<S, A> : Sourced<S> {
     val setter: Setter<S, A>

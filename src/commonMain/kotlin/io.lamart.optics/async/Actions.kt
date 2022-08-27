@@ -1,64 +1,52 @@
 package io.lamart.optics.async
 
-import io.lamart.optics.source.SourcedSetter
+import io.lamart.optics.Pipe
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onStart
 
-class Actions<P, T> internal constructor(
-    val source: SourcedSetter<*, Async<T>>,
-    val behavior: Behavior<P, T>,
-    val scope: CoroutineScope,
-    val effect: Effect<Async<T>>,
-    val emit: suspend (P) -> Unit,
-    val getFlow: () -> Flow<P>
-) {
+class Actions<P>(
+    private val scope: CoroutineScope,
+    private val pipe: Pipe<P>,
+    private val onCancel: (reason: Throwable) -> Unit,
+    private val onReset: () -> Unit,
+    private val onExecute: (Flow<P>) -> Flow<*>
+)  {
     private var job: Job = Job().apply { cancel() }
 
     fun cancel() {
         if (scope.isActive and job.isActive) {
-            val reason = BehaviorCancelled()
+            val reason = Cancelled()
 
             job.cancel(reason)
-            source.set(failure(reason))
+            onCancel(reason)
         }
     }
 
     fun reset() {
         if (scope.isActive and !job.isActive)
-            source.modify { if (it.isSuccess or it.isFailure) idle() else it }
+            onReset()
     }
 
-    fun execute(vararg payloads: P) {
+    fun execute(vararg payload: P) {
         if (scope.isActive) {
             if (job.isActive) {
-                scope.launch {
-                    payloads.forEach { emit(it) }
-                }
+                scope.launch { payload.forEach { pipe.input(it) } }
             } else {
-                job = getFlow()
-                    .onStart { payloads.forEach { emit(it) } }
-                    .let(behavior)
-                    .onEach(source::set)
-                    .let { effect(scope, it) }
+                job = pipe.output
+                    .onStart { payload.forEach { emit(it) } }
+                    .let(onExecute)
                     .launchIn(scope)
             }
         }
     }
 
-    class BehaviorCancelled internal constructor() : CancellationException("User cancelled current behavior") {
+    class Cancelled internal constructor() : CancellationException("User cancelled current behavior") {
         override fun equals(other: Any?): Boolean =
-            other is BehaviorCancelled || super.equals(other)
+            other is Cancelled || super.equals(other)
 
         override fun hashCode(): Int =
             super.hashCode()
-
     }
 }
-
-fun <P, T> SourcedSetter<*, Async<T>>.toAsyncActions(
-    behavior: Behavior<P, T>,
-    scope: CoroutineScope = GlobalScope,
-    effect: Effect<Async<T>> = effectOf()
-): Actions<P, T> =
-    MutableSharedFlow<P>().let { flow -> Actions(this, behavior, scope, effect, flow::emit, flow::asSharedFlow) }
-

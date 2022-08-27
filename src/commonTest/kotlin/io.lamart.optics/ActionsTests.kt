@@ -17,13 +17,13 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class ActionsTests {
 
-    data class State<T>(val async: io.lamart.optics.async.Async<T> = idle()) {
+    data class State<T>(val state: Async<T> = idle()) {
 
         companion object {
-            fun <T> test(): Pair<List<State<T>>, SourcedLens<State<T>, io.lamart.optics.async.Async<T>>> {
+            fun <T> test(): Pair<List<State<T>>, SourcedLens<State<T>, Async<T>>> {
                 val results = mutableListOf(State<T>())
                 val source = Source(get = results::last, set = results::add)
-                val async = source.compose(PLens({ it.async }, { s, f -> s.copy(async = f) }))
+                val async = source.compose(PLens({ it.state }, { s, f -> s.copy(state = f) }))
 
                 return results to async
             }
@@ -55,20 +55,19 @@ class ActionsTests {
     @Test
     fun executeSinglePayload() = runTest {
         val (states, lens) = State.test<Int>()
-        val actions = Actions(
-            source = lens,
+        val actions = Async.actions(
+            async = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
             effect = effectOf(),
-            emit = { },
-            getFlow = ::emptyFlow
+            pipe = Pipe({}, emptyFlow())
         )
 
         actions.execute(0)
         advanceUntilIdle()
 
         assertEquals(
-            expected = states.map { it.async },
+            expected = states.map { it.state },
             actual = listOf(
                 idle(),
                 executing(),
@@ -80,20 +79,19 @@ class ActionsTests {
     @Test
     fun executeMultiplePayloads() = runTest {
         val (states, lens) = State.test<Int>()
-        val actions = Actions(
-            source = lens,
+        val actions = Async.actions(
+            async = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
             effect = effectOf(),
-            emit = { },
-            getFlow = ::emptyFlow
+            pipe = Pipe({}, emptyFlow())
         )
 
         actions.execute(1, 2, 3)
         advanceUntilIdle()
 
         assertEquals(
-            expected = states.map { it.async },
+            expected = states.map { it.state },
             actual = listOf(
                 idle(),
                 executing(),
@@ -109,20 +107,19 @@ class ActionsTests {
         val (states, lens) = State.test<Int>()
         val times = 3
         val flow = MutableSharedFlow<Int>()
-        val actions = Actions(
-            source = lens,
+        val actions = Async.actions(
+            async = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
             effect = effectOf(),
-            emit = flow::emit,
-            getFlow = { flow.take(times-1) }
+            pipe = Pipe(flow::emit, flow.take(times-1))
         )
 
         repeat(times, actions::execute)
         advanceUntilIdle()
 
         assertEquals(
-            expected = states.map { it.async },
+            expected = states.map { it.state },
             actual = listOf(
                 idle(),
                 executing(),
@@ -137,20 +134,19 @@ class ActionsTests {
     fun checkEffect() = runTest {
         val (states, lens) = State.test<Int>()
         val effects = mutableListOf<io.lamart.optics.async.Async<Int>>()
-        val actions = Actions(
-            source = lens,
+        val actions = Async.actions(
+            async = lens,
             behavior = concatting(suspension = ::identity),
             scope = this,
             effect = { it.onEach(effects::add) },
-            emit = { },
-            getFlow = ::emptyFlow
+            pipe = Pipe({}, emptyFlow())
         )
 
         actions.execute(1)
         advanceUntilIdle()
 
         assertEquals(
-            states.map { it.async }.drop(1), // drop the default state
+            states.map { it.state }.drop(1), // drop the default state
             effects
         )
     }
