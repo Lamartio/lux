@@ -1,6 +1,7 @@
 package io.lamart.optics.source
 
 interface Sourced<S> {
+
     val source: Source<S>
 
     companion object

@@ -1,7 +1,6 @@
 package io.lamart.optics.source
 
 import arrow.core.Either
-import arrow.core.identity
 import arrow.optics.Optional
 import arrow.optics.Setter
 

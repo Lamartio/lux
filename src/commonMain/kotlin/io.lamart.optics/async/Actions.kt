@@ -12,7 +12,7 @@ class Actions<P>(
     private val onCancel: (reason: Throwable) -> Unit,
     private val onReset: () -> Unit,
     private val onExecute: (Flow<P>) -> Flow<*>
-)  {
+) {
     private var job: Job = Job().apply { cancel() }
 
     fun cancel() {

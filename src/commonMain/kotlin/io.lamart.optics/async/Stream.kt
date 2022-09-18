@@ -17,7 +17,9 @@ data class Stream<out T>(
     companion object {
         fun <T> idle(value: Option<T> = none()): Stream<T> = Stream(state = Async.idle(), value = value)
         fun <T> executing(value: Option<T> = none()): Stream<T> = Stream(state = Async.executing(), value = value)
-        fun <T> failure(error: Throwable, value: Option<T> = none()): Stream<T> = Stream(state = Async.failure(error), value = value)
+        fun <T> failure(error: Throwable, value: Option<T> = none()): Stream<T> =
+            Stream(state = Async.failure(error), value = value)
+
         fun <T> success(value: Option<T> = none()): Stream<T> = Stream(state = Async.success(Unit), value = value)
     }
 }
@@ -37,8 +39,12 @@ fun <P, T> Stream.Companion.actionsOf(
         onExecute = { output ->
             output
                 .let(behavior)
-                .map(::next)
-                .onCompletion { reason -> emit(reason.toSignal()) }
+                .map(Signal.Companion::next)
+                .onCompletion { reason ->
+                    reason
+                        .let<Throwable?, Signal<T>>(Signal.Companion::complete)
+                        .let { emit(it) }
+                }
                 .runningFold(Stream(), ::combine)
                 .drop(1)
                 .onEach(source::set)
@@ -62,15 +68,16 @@ private fun <T> combine(stream: Stream<T>, signal: Signal<T>): Stream<T> =
 private sealed class Signal<T> {
     data class Next<T>(val state: Async<T>) : Signal<T>()
     data class Complete<T>(val state: Async<Unit>) : Signal<T>()
-}
 
-private fun <T> next(value: Async<T>): Signal<T> = Signal.Next(value)
-
-private fun <T> Throwable?.toSignal(): Signal<T> =
-    when (this) {
-        null -> Signal.Complete(Async.success(Unit))
-        else -> Signal.Complete(Async.failure(this))
+    companion object {
+        fun <T> next(value: Async<T>): Signal<T> = Next(value)
+        fun <T> complete(reason: Throwable?): Signal<T> =
+            when (reason) {
+                null -> Complete(Async.success(Unit))
+                else -> Complete(Async.failure(reason))
+            }
     }
+}
 
 fun <P, T> SourcedSetter<*, Stream<T>>.toActions(
     behavior: Behavior<P, T>,
