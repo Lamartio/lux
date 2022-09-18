@@ -6,13 +6,14 @@ import arrow.optics.Optional
 import arrow.optics.Setter
 
 interface SourcedOptional<S, A> : Sourced<S>, SourcedSetter<S, A> {
+
     val optional: Optional<S, A>
 
     fun getOrModify(): Either<S, A> =
         optional.getOrModify(source.get())
 
     override fun modify(map: (focus: A) -> A): S =
-        optional.getOrModify(source.get()).fold(::identity) { a -> set(map(a)) }
+        optional.modify(source.get(), map)
 
     fun getOrNull(): A? =
         optional.getOrNull(source.get())

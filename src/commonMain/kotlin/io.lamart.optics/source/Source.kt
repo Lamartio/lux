@@ -8,8 +8,11 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 interface Source<S> {
+
     fun get(): S
+
     fun set(source: S)
+
     fun <A> compose(getter: Getter<S, A>): SourcedGetter<S, A> =
         SourcedGetter(this, getter)
 

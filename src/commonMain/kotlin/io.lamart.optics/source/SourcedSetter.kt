@@ -6,6 +6,7 @@ import io.lamart.optics.async.Stream
 
 interface SourcedSetter<S, A> : Sourced<S> {
     val setter: Setter<S, A>
+
     fun modify(map: (focus: A) -> A): S =
         setter.modify(source.get(), map).also(source::set)
 
@@ -21,9 +22,8 @@ interface SourcedSetter<S, A> : Sourced<S> {
     companion object
 }
 
-operator fun <S, A> SourcedSetter.Companion.invoke(source: Source<S>, setter: Setter<S, A>): SourcedSetter<S, A> {
-    return object : SourcedSetter<S, A> {
+operator fun <S, A> SourcedSetter.Companion.invoke(source: Source<S>, setter: Setter<S, A>): SourcedSetter<S, A> =
+    object : SourcedSetter<S, A> {
         override val source: Source<S> = source
         override val setter: Setter<S, A> = setter
     }
-}

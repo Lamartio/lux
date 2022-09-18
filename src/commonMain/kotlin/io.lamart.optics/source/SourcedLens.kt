@@ -7,13 +7,15 @@ import arrow.optics.Optional
 import arrow.optics.Setter
 
 interface SourcedLens<S, A> : Sourced<S>, SourcedOptional<S, A>, SourcedGetter<S, A>, SourcedSetter<S, A> {
+
     val lens: Lens<S, A>
 
     override fun getOrModify(): Either<S, A> =
-        Either.Right(get())
+        lens.getOrModify(source.get())
 
     infix fun <B> compose(other: Lens<A, B>): SourcedLens<S, B> =
         SourcedLens(source, lens.compose(other))
+
     companion object
 }
 
