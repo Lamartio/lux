@@ -1,3 +1,4 @@
+@file:OptIn(kotlinx.coroutines.FlowPreview::class, kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 package io.lamart.optics.async
 
 import kotlinx.coroutines.flow.*

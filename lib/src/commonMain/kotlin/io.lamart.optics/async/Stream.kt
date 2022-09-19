@@ -81,7 +81,7 @@ private sealed class Signal<T> {
 
 fun <P, T> SourcedSetter<*, Stream<T>>.toActions(
     behavior: Behavior<P, T>,
-    scope: CoroutineScope = GlobalScope,
+    scope: CoroutineScope,
     effect: Effect<Stream<T>> = effectOf()
 ): Actions<P> =
     Stream.actionsOf(this, behavior, scope, effect, MutableSharedFlow<P>().toPipe())
