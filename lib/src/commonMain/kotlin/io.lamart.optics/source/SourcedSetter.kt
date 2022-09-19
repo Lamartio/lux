@@ -7,13 +7,13 @@ interface SourcedSetter<S, A> : Sourced<S> {
     val setter: Setter<S, A>
 
     fun modify(map: (focus: A) -> A): S =
-        setter.modify(source.get(), map).also(source::set)
+        source.modify { setter.modify(it, map) }
 
     fun set(focus: A): S =
-        setter.set(source.get(), focus).also(source::set)
+        source.modify { setter.set(it, focus) }
 
     fun lift(map: (focus: A) -> A): () -> S =
-        { setter.lift(map).invoke(source.get()).also(source::set) }
+        { source.modify(setter.lift(map)) }
 
     infix fun <B> compose(other: Setter<A, B>): SourcedSetter<S, B> =
         SourcedSetter(source, setter.compose(other))

@@ -1,3 +1,4 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
 package io.lamart.optics
 
 import arrow.core.Option
@@ -9,6 +10,7 @@ import io.lamart.optics.async.*
 import io.lamart.optics.source.Source
 import io.lamart.optics.source.SourcedLens
 import io.lamart.optics.source.invoke
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -22,7 +24,10 @@ class StreamTests {
         companion object {
             fun <T> test(): Pair<List<State<T>>, SourcedLens<State<T>, Stream<T>>> {
                 val results = mutableListOf(State<T>())
-                val source = Source(get = results::last, set = results::add)
+                val source = Source(
+                    get = results::last,
+                    modify = { map -> results.last().let(map).also(results::add) }
+                )
                 val async = source.compose(PLens({ it.state }, { s, f -> s.copy(state = f) }))
 
                 return results to async

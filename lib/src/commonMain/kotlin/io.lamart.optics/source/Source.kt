@@ -4,14 +4,14 @@ import arrow.optics.Getter
 import arrow.optics.Lens
 import arrow.optics.Optional
 import arrow.optics.Setter
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.updateAndGet
 
 interface Source<S> {
 
     fun get(): S
 
-    fun set(source: S)
+    fun modify(map: (source: S) -> S): S
 
     fun <A> compose(getter: Getter<S, A>): SourcedGetter<S, A> =
         SourcedGetter(this, getter)
@@ -28,11 +28,11 @@ interface Source<S> {
     companion object
 }
 
-operator fun <S> Source.Companion.invoke(get: () -> S, set: (source: S) -> Unit): Source<S> =
+operator fun <S> Source.Companion.invoke(get: () -> S, modify: (map: (S) -> S) -> S): Source<S> =
     object : Source<S> {
         override fun get(): S = get()
-        override fun set(source: S) = set(source)
+        override fun modify(map: (S) -> S): S = modify(map)
     }
 
-operator fun <T, S> Source<S>.getValue(thisRef: T, property: KProperty<*>): S = get()
-operator fun <T,S> Source<S>.setValue(thisRef: T, property: KProperty<*>, value: S) = set(value)
+fun <T> MutableStateFlow<T>.toSource(): Source<T> =
+    Source(get = this::value, modify = this::updateAndGet)

@@ -12,16 +12,10 @@ interface SourcedOptional<S, A> : Sourced<S>, SourcedSetter<S, A> {
         optional.getOrModify(source.get())
 
     override fun modify(map: (focus: A) -> A): S =
-        optional.modify(source.get(), map)
+        source.modify { optional.modify(it, map) }
 
     fun getOrNull(): A? =
         optional.getOrNull(source.get())
-
-    fun setNullable(focus: A): S? =
-        optional.setNullable(source.get(), focus)
-
-    fun modifyNullable(map: (focus: A) -> A): S? =
-        optional.modifyNullable(source.get(), map)
 
     infix fun <B> compose(other: Optional<A, B>): SourcedOptional<S, B> =
         SourcedOptional(source, optional.compose(other))
