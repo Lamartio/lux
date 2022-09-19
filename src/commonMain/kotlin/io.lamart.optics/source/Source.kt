@@ -34,11 +34,5 @@ operator fun <S> Source.Companion.invoke(get: () -> S, set: (source: S) -> Unit)
         override fun set(source: S) = set(source)
     }
 
-fun <T, S> Source<S>.toDelegate(): ReadWriteProperty<T, S> =
-    object : ReadWriteProperty<T, S> {
-        override fun getValue(thisRef: T, property: KProperty<*>): S = get()
-        override fun setValue(thisRef: T, property: KProperty<*>, value: S) = set(value)
-    }
-
-fun <S> Source<S>.toSourced(): Sourced<S> =
-    Sourced(this)
+operator fun <T, S> Source<S>.getValue(thisRef: T, property: KProperty<*>): S = get()
+operator fun <T,S> Source<S>.setValue(thisRef: T, property: KProperty<*>, value: S) = set(value)

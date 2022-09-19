@@ -34,8 +34,8 @@ fun <P, T> Stream.Companion.actionsOf(
     Actions(
         scope,
         pipe,
-        onCancel = { source.compose { source, map -> source.copy(state = map(source.state)) }.set(Async.failure(it)) },
-        onReset = { source.modify { if (it.state.isSuccess or it.state.isFailure) Stream() else it } },
+        onCancel = { source.compose { stream, map -> stream.copy(state = map(stream.state)) }.set(Async.failure(it)) },
+        onReset = { source.modify { if (it.state.isSuccess or it.state.isFailure) idle() else it } },
         onExecute = { output ->
             output
                 .let(behavior)

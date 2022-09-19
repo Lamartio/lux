@@ -2,8 +2,6 @@ plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.7.0'
 }
 
-//apply plugin: 'kotlin-kapt'
-
 group = 'io.lamart'
 version = '1.0-SNAPSHOT'
 
@@ -11,7 +9,6 @@ repositories {
     mavenCentral()
 }
 
-def arrow_version = "1.0.1"
 kotlin {
     jvm {
         compilations.all {
@@ -33,14 +30,14 @@ kotlin {
     iosArm64 {
         binaries {
             framework {
-                baseName = 'Optics'
+                baseName = 'Lux'
             }
         }
     }
     sourceSets {
         commonMain {
             dependencies {
-                implementation "io.arrow-kt:arrow-optics:$arrow_version"
+                implementation "io.arrow-kt:arrow-optics:1.0.1"
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
             }
         }
