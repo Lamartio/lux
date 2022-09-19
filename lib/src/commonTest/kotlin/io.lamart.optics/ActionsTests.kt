@@ -1,3 +1,4 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
 package io.lamart.optics
 
 import arrow.core.identity
@@ -14,7 +15,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ActionsTests {
 
     data class State<T>(val state: Async<T> = Async.idle()) {
@@ -133,7 +133,7 @@ class ActionsTests {
     @Test
     fun checkEffect() = runTest {
         val (states, lens) = State.test<Int>()
-        val effects = mutableListOf<io.lamart.optics.async.Async<Int>>()
+        val effects = mutableListOf<Async<Int>>()
         val actions = Async.actionsOf(
             source = lens,
             behavior = concatting(suspension = ::identity),

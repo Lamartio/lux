@@ -1,12 +1,10 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
 package io.lamart.optics
 
 import io.lamart.optics.async.Effect
 import io.lamart.optics.async.effectOf
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.plus
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test

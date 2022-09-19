@@ -1,3 +1,4 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
 package io.lamart.optics
 
 import arrow.core.Option
@@ -9,6 +10,7 @@ import io.lamart.optics.async.*
 import io.lamart.optics.source.Source
 import io.lamart.optics.source.SourcedLens
 import io.lamart.optics.source.invoke
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
