@@ -1,6 +1,8 @@
 package io.lamart.optics.source
 
 import arrow.optics.Getter
+import io.lamart.optics.readOnlyPropertyOf
+import kotlin.properties.ReadOnlyProperty
 
 interface SourcedGetter<S, A> : Sourced<S> {
 
@@ -20,3 +22,6 @@ operator fun <S, A> SourcedGetter.Companion.invoke(source: Source<S>, getter: Ge
         override val getter: Getter<S, A> = getter
         override fun get(): A = source.get().let { getter.get(it) }
     }
+
+fun <T, S, A> SourcedGetter<S, A>.asProperty(): ReadOnlyProperty<T, A> =
+    readOnlyPropertyOf(this::get)

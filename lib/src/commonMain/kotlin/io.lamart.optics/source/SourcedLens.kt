@@ -5,6 +5,8 @@ import arrow.optics.Getter
 import arrow.optics.Lens
 import arrow.optics.Optional
 import arrow.optics.Setter
+import io.lamart.optics.readWritePropertyOf
+import kotlin.properties.ReadWriteProperty
 
 interface SourcedLens<S, A> : Sourced<S>, SourcedOptional<S, A>, SourcedGetter<S, A>, SourcedSetter<S, A> {
 
@@ -27,3 +29,6 @@ operator fun <S, A> SourcedLens.Companion.invoke(source: Source<S>, lens: Lens<S
         override val setter: Setter<S, A> = lens
         override val getter: Getter<S, A> = lens
     }
+
+fun <T, S, A> SourcedLens<S, A>.asProperty(): ReadWriteProperty<T, A> =
+    readWritePropertyOf(this::get, this::set)
