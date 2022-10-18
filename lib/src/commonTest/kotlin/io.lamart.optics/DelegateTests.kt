@@ -2,9 +2,6 @@ package io.lamart.optics
 
 import arrow.core.getOrElse
 import arrow.core.some
-import arrow.optics.Getter
-import arrow.optics.Lens
-import arrow.optics.Optional
 import io.lamart.optics.source.asNullableProperty
 import io.lamart.optics.source.asProperty
 import io.lamart.optics.source.toSource
@@ -23,14 +20,14 @@ class DelegateTests {
 
     @Test
     fun getter() {
-        val person by source.compose(Getter { it.person }).asProperty()
+        val person by source.compose(getterOf { person }).asProperty()
 
         assertEquals("Danny", person.name)
     }
 
     @Test
     fun lens() {
-        var person by source.compose(Lens({ it.person }, { s, f -> s.copy(person = f) })).asProperty()
+        var person by source.compose(lensOf({ person }, { copy(person = it) })).asProperty()
 
         assertEquals("Danny", person.name)
         person = Person(name = person.name.reversed())
@@ -39,8 +36,7 @@ class DelegateTests {
 
     @Test
     fun optional() {
-        val personSource = source.compose(Optional({ it.person.some() }, { s, f -> s.copy(person = f) }))
-        var person by personSource.asProperty()
+        var person by source.compose(optionalOf(nullable { person }, { copy(person = it) })).asProperty()
         val getName: () -> String = { person.map { it.name }.getOrElse { "" } }
 
         assertEquals("Danny", getName())
@@ -50,8 +46,7 @@ class DelegateTests {
 
     @Test
     fun nullable() {
-        val personSource = source.compose(Optional({ it.person.some() }, { s, f -> s.copy(person = f) }))
-        var person by personSource.asNullableProperty()
+        var person by source.compose(optionalOf(nullable { person }, { copy(person = it) })).asNullableProperty()
 
         assertEquals("Danny", person?.name)
         person = Person(name = person?.name?.reversed().orEmpty())
