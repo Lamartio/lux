@@ -28,5 +28,5 @@ operator fun <S, A> SourcedLens.Companion.invoke(source: Source<S>, lens: Lens<S
         override val fold: Fold<S, A> = lens
     }
 
-fun <T, S, A> SourcedLens<S, A>.asProperty(): ReadWriteProperty<T, A> =
+fun <T, S, A> SourcedLens<S, A>.toProperty(): ReadWriteProperty<T, A> =
     readWritePropertyOf(this::get, this::set)

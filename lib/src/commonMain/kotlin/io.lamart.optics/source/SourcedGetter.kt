@@ -24,5 +24,5 @@ operator fun <S, A> SourcedGetter.Companion.invoke(source: Source<S>, getter: Ge
         override val fold: Fold<S, A> = getter
     }
 
-fun <T, S, A> SourcedGetter<S, A>.asProperty(): ReadOnlyProperty<T, A> =
+fun <T, S, A> SourcedGetter<S, A>.toProperty(): ReadOnlyProperty<T, A> =
     readOnlyPropertyOf(this::get)

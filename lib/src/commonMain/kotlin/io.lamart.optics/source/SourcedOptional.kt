@@ -41,13 +41,13 @@ operator fun <S, A> SourcedOptional.Companion.invoke(
         override val fold: Fold<S, A> = optional
     }
 
-fun <T, S, A> SourcedOptional<S, A>.asProperty(): ReadWriteProperty<T, Option<A>> =
+fun <T, S, A> SourcedOptional<S, A>.toProperty(): ReadWriteProperty<T, Option<A>> =
     readWritePropertyOf(
         get = this::get,
         set = { it.map(this::set) }
     )
 
-fun <T, S, A> SourcedOptional<S, A>.asNullableProperty(): ReadWriteProperty<T, A?> =
+fun <T, S, A> SourcedOptional<S, A>.toNullableProperty(): ReadWriteProperty<T, A?> =
     readWritePropertyOf(
         get = this::getOrNull,
         set = { it?.let(this::set) }

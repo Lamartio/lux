@@ -6,7 +6,7 @@ import io.lamart.optics.async.switching
 import io.lamart.optics.async.toActions
 import io.lamart.optics.source.SourcedOptional
 import io.lamart.optics.source.SourcedSetter
-import io.lamart.optics.source.asNullableProperty
+import io.lamart.optics.source.toNullableProperty
 import io.lamart.optics.source.toSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -78,7 +78,7 @@ class OpticsExample {
             .compose(Auth.authenticated)
             .compose(Auth.Authenticated.user)
             .compose(Person.name)
-            .asNullableProperty()
+            .toNullableProperty()
 
     }
 
