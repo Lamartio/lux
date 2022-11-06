@@ -17,7 +17,7 @@ class Actions<P>(
 
     fun cancel() {
         if (scope.isActive and job.isActive) {
-            val reason = Cancelled()
+            val reason = CancellationException("User cancelled current behavior")
 
             job.cancel(reason)
             onCancel(reason)
@@ -40,13 +40,5 @@ class Actions<P>(
                     .launchIn(scope)
             }
         }
-    }
-
-    class Cancelled internal constructor() : CancellationException("User cancelled current behavior") {
-        override fun equals(other: Any?): Boolean =
-            other is Cancelled || super.equals(other)
-
-        override fun hashCode(): Int =
-            super.hashCode()
     }
 }
