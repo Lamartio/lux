@@ -7,7 +7,6 @@ import io.lamart.optics.Pipe
 import io.lamart.optics.source.SourcedSetter
 import io.lamart.optics.toPipe
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 
 data class Stream<out T>(
@@ -17,8 +16,8 @@ data class Stream<out T>(
     companion object {
         fun <T> idle(value: Option<T> = none()): Stream<T> = Stream(state = Async.idle(), value = value)
         fun <T> executing(value: Option<T> = none()): Stream<T> = Stream(state = Async.executing(), value = value)
-        fun <T> failure(error: Throwable, value: Option<T> = none()): Stream<T> =
-            Stream(state = Async.failure(error), value = value)
+        fun <T> failure(reason: Throwable, value: Option<T> = none()): Stream<T> =
+            Stream(state = Async.failure(reason), value = value)
 
         fun <T> success(value: Option<T> = none()): Stream<T> = Stream(state = Async.success(Unit), value = value)
     }
