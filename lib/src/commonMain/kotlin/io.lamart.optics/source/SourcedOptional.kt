@@ -26,6 +26,9 @@ interface SourcedOptional<S, A> : Sourced<S>, SourcedSetter<S, A> {
     companion object
 }
 
+fun <S,A> SourcedOptional<S,A>.get() : Option<A> =
+    getOrModify().orNone()
+
 operator fun <S, A> SourcedOptional.Companion.invoke(
     source: Source<S>,
     optional: Optional<S, A>
@@ -38,12 +41,12 @@ operator fun <S, A> SourcedOptional.Companion.invoke(
 
 fun <T, S, A> SourcedOptional<S, A>.asProperty(): ReadWriteProperty<T, Option<A>> =
     readWritePropertyOf(
-        get = { this.getOrModify().orNone() },
+        get = this::get,
         set = { it.map(this::set) }
     )
 
 fun <T, S, A> SourcedOptional<S, A>.asNullableProperty(): ReadWriteProperty<T, A?> =
     readWritePropertyOf(
-        get = { this.getOrModify().orNull() },
+        get = this::getOrNull,
         set = { it?.let(this::set) }
     )

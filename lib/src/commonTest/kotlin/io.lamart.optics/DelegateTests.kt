@@ -36,17 +36,17 @@ class DelegateTests {
 
     @Test
     fun optional() {
-        var person by source.compose(optionalOf(nullable { person }, { copy(person = it) })).asProperty()
+        var person by source.compose(optionalOf({ person }, { copy(person = it) })).asProperty()
         val getName: () -> String = { person.map { it.name }.getOrElse { "" } }
 
         assertEquals("Danny", getName())
-        person = person.map { it.name.reversed() }.getOrElse { "" }.let { Person(name = it) }.some()
+        person = person.map { Person(name = it.name.reversed()) }
         assertEquals("ynnaD", getName())
     }
 
     @Test
     fun nullable() {
-        var person by source.compose(optionalOf(nullable { person }, { copy(person = it) })).asNullableProperty()
+        var person by source.compose(optionalOf({ person }, { copy(person = it) })).asNullableProperty()
 
         assertEquals("Danny", person?.name)
         person = Person(name = person?.name?.reversed().orEmpty())
