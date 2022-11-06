@@ -1,10 +1,7 @@
 package io.lamart.optics.source
 
 import arrow.core.Either
-import arrow.optics.Getter
-import arrow.optics.Lens
-import arrow.optics.Optional
-import arrow.optics.Setter
+import arrow.optics.*
 import io.lamart.optics.readWritePropertyOf
 import kotlin.properties.ReadWriteProperty
 
@@ -28,6 +25,7 @@ operator fun <S, A> SourcedLens.Companion.invoke(source: Source<S>, lens: Lens<S
         override val optional: Optional<S, A> = lens
         override val setter: Setter<S, A> = lens
         override val getter: Getter<S, A> = lens
+        override val fold: Fold<S, A> = lens
     }
 
 fun <T, S, A> SourcedLens<S, A>.asProperty(): ReadWriteProperty<T, A> =

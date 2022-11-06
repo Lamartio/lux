@@ -2,12 +2,13 @@ package io.lamart.optics.source
 
 import arrow.core.Either
 import arrow.core.Option
+import arrow.optics.Fold
 import arrow.optics.Optional
 import arrow.optics.Setter
 import io.lamart.optics.readWritePropertyOf
 import kotlin.properties.ReadWriteProperty
 
-interface SourcedOptional<S, A> : Sourced<S>, SourcedSetter<S, A> {
+interface SourcedOptional<S, A> : Sourced<S>, SourcedSetter<S, A>, SourcedFold<S,A> {
 
     val optional: Optional<S, A>
 
@@ -37,6 +38,7 @@ operator fun <S, A> SourcedOptional.Companion.invoke(
         override val source: Source<S> = source
         override val optional: Optional<S, A> = optional
         override val setter: Setter<S, A> = optional
+        override val fold: Fold<S, A> = optional
     }
 
 fun <T, S, A> SourcedOptional<S, A>.asProperty(): ReadWriteProperty<T, Option<A>> =

@@ -1,10 +1,11 @@
 package io.lamart.optics.source
 
+import arrow.optics.Fold
 import arrow.optics.Getter
 import io.lamart.optics.readOnlyPropertyOf
 import kotlin.properties.ReadOnlyProperty
 
-interface SourcedGetter<S, A> : Sourced<S> {
+interface SourcedGetter<S, A> : Sourced<S>, SourcedFold<S,A> {
 
     val getter: Getter<S, A>
 
@@ -20,7 +21,7 @@ interface SourcedGetter<S, A> : Sourced<S> {
 operator fun <S, A> SourcedGetter.Companion.invoke(source: Source<S>, getter: Getter<S, A>): SourcedGetter<S, A> =
     object : SourcedGetter<S, A>, Sourced<S> by Sourced(source) {
         override val getter: Getter<S, A> = getter
-        override fun get(): A = source.get().let { getter.get(it) }
+        override val fold: Fold<S, A> = getter
     }
 
 fun <T, S, A> SourcedGetter<S, A>.asProperty(): ReadOnlyProperty<T, A> =
