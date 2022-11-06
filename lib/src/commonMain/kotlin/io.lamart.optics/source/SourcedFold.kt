@@ -19,4 +19,6 @@ interface SourcedFold<S, A> : Sourced<S> {
 
     fun isNotEmpty(): Boolean =
         fold.isNotEmpty(source.get())
+
+    companion object
 }
