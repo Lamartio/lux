@@ -34,10 +34,11 @@ class OpticsExample {
     private sealed class Auth {
         object NotAuthenticated : Auth()
         data class Authenticated(val user: Person) : Auth() {
-            companion object: OpticsFactory<Authenticated> {
-                val user = lensOf({ user}, { copy(user = it)})
+            companion object : OpticsFactory<Authenticated> {
+                val user = lensOf({ user }, { copy(user = it) })
             }
         }
+
         companion object : OpticsFactory<Auth> {
             val notAuthenticated = prismOf<NotAuthenticated>()
             val authenticated = prismOf<Authenticated>()
@@ -48,26 +49,24 @@ class OpticsExample {
         .let(::MutableStateFlow)
         .toSource()
 
-    fun lens() {
-        val name = source
-            .compose(State.person)
-            .compose(Person.name)
+    private val name by source.compose(State.person).compose(Person.name).toProperty()
+
+    fun name() {
+        val source = source + State.person + Person.name
+        val name by source.toProperty()
     }
 
     fun friend() {
-        val source: SourcedOptional<State, Person> = source
+        val friend: SourcedOptional<State, Person> = source
             .compose(State.person)
             .compose(Person.friends)
             .compose(listOptionalOf { name == "Danny" })
-        var friend by source.toNullableProperty()
-
-        friend
     }
 
     fun friends() {
         val friends: SourcedSetter<State, Person> = source
-            .compose(State.person)
-            .compose(Person.friends)
+            .plus(State.person)
+            .plus(Person.friends)
             .compose(listTraversalOf { filter { it.name == "Danny" } })
     }
 

@@ -12,8 +12,11 @@ interface SourcedGetter<S, A> : Sourced<S>, SourcedFold<S,A> {
     fun get(): A =
         getter.get(source.get())
 
-    infix fun <B> compose(other: Getter<in A, out B>): SourcedGetter<S, B> =
+    infix fun <B> compose(other: Getter<A, B>): SourcedGetter<S, B> =
         SourcedGetter(source, getter.compose(other))
+
+    operator fun <B> plus(other: Getter<A, B>): SourcedGetter<S, B> =
+        compose(other)
 
     companion object
 }
@@ -24,5 +27,5 @@ operator fun <S, A> SourcedGetter.Companion.invoke(source: Source<S>, getter: Ge
         override val fold: Fold<S, A> = getter
     }
 
-fun <T, S, A> SourcedGetter<S, A>.toProperty(): ReadOnlyProperty<T, A> =
+fun <A> SourcedGetter<*, A>.toProperty(): ReadOnlyProperty<Any?, A> =
     readOnlyPropertyOf(this::get)

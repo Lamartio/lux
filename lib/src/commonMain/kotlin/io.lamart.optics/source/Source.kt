@@ -25,6 +25,18 @@ interface Source<S> {
     fun <A> compose(lens: Lens<S, A>): SourcedLens<S, A> =
         SourcedLens(this, lens)
 
+    operator fun <A> plus(getter: Getter<S, A>): SourcedGetter<S, A> =
+        compose(getter)
+
+    operator fun <A> plus(setter: Setter<S, A>): SourcedSetter<S, A> =
+        compose(setter)
+
+    operator fun <A> plus(optional: Optional<S, A>): SourcedOptional<S, A> =
+        compose(optional)
+
+    operator fun <A> plus(lens: Lens<S, A>): SourcedLens<S, A> =
+        compose(lens)
+
     companion object
 }
 

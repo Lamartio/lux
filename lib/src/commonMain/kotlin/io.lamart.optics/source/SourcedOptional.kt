@@ -3,6 +3,7 @@ package io.lamart.optics.source
 import arrow.core.Either
 import arrow.core.Option
 import arrow.optics.Fold
+import arrow.optics.Getter
 import arrow.optics.Optional
 import arrow.optics.Setter
 import io.lamart.optics.readWritePropertyOf
@@ -24,6 +25,9 @@ interface SourcedOptional<S, A> : Sourced<S>, SourcedSetter<S, A>, SourcedFold<S
     infix fun <B> compose(other: Optional<A, B>): SourcedOptional<S, B> =
         SourcedOptional(source, optional.compose(other))
 
+    operator fun <B> plus(other: Optional<A, B>): SourcedOptional<S, B> =
+        compose(other)
+
     companion object
 }
 
@@ -41,13 +45,13 @@ operator fun <S, A> SourcedOptional.Companion.invoke(
         override val fold: Fold<S, A> = optional
     }
 
-fun <T, S, A> SourcedOptional<S, A>.toProperty(): ReadWriteProperty<T, Option<A>> =
+fun <A> SourcedOptional<*, A>.toProperty(): ReadWriteProperty<Any?, Option<A>> =
     readWritePropertyOf(
         get = this::get,
         set = { it.map(this::set) }
     )
 
-fun <T, S, A> SourcedOptional<S, A>.toNullableProperty(): ReadWriteProperty<T, A?> =
+fun <A> SourcedOptional<*, A>.toNullableProperty(): ReadWriteProperty<Any?, A?> =
     readWritePropertyOf(
         get = this::getOrNull,
         set = { it?.let(this::set) }

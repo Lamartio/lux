@@ -15,6 +15,9 @@ interface SourcedLens<S, A> : Sourced<S>, SourcedOptional<S, A>, SourcedGetter<S
     infix fun <B> compose(other: Lens<A, B>): SourcedLens<S, B> =
         SourcedLens(source, lens.compose(other))
 
+    operator fun <B> plus(other: Lens<A, B>): SourcedLens<S, B> =
+        compose(other)
+
     companion object
 }
 
@@ -28,5 +31,5 @@ operator fun <S, A> SourcedLens.Companion.invoke(source: Source<S>, lens: Lens<S
         override val fold: Fold<S, A> = lens
     }
 
-fun <T, S, A> SourcedLens<S, A>.toProperty(): ReadWriteProperty<T, A> =
+fun <A> SourcedLens<*, A>.toProperty(): ReadWriteProperty<Any?, A> =
     readWritePropertyOf(this::get, this::set)

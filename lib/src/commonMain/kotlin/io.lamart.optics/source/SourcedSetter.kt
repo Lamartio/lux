@@ -18,6 +18,9 @@ interface SourcedSetter<S, A> : Sourced<S> {
     infix fun <B> compose(other: Setter<A, B>): SourcedSetter<S, B> =
         SourcedSetter(source, setter.compose(other))
 
+    operator fun <B> plus(other: Setter<A, B>): SourcedSetter<S, B> =
+        compose(other)
+
     companion object
 }
 
