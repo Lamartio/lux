@@ -18,9 +18,6 @@ interface OpticsFactory<S> {
 
 }
 
-fun <S, A> getterOf(get: S.() -> A): Getter<S, A> =
-    Getter(get)
-
 fun <S, A> lensOf(get: S.() -> A, set: S.(A) -> S): Lens<S, A> =
     Lens(get, set)
 

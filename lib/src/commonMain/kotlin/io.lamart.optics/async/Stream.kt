@@ -7,6 +7,7 @@ import io.lamart.optics.Pipe
 import io.lamart.optics.source.SourcedSetter
 import io.lamart.optics.toPipe
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 
 data class Stream<out T>(
@@ -80,7 +81,7 @@ private sealed class Signal<T> {
 
 fun <P, T> SourcedSetter<*, Stream<T>>.toActions(
     behavior: Behavior<P, T>,
-    scope: CoroutineScope,
+    scope: CoroutineScope = GlobalScope,
     effect: Effect<Stream<T>> = effectOf()
 ): Actions<P> =
     Stream.actionsOf(this, behavior, scope, effect, MutableSharedFlow<P>().toPipe())

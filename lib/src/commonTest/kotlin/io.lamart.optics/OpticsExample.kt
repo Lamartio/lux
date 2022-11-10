@@ -4,10 +4,7 @@ import arrow.core.identity
 import io.lamart.optics.async.Async
 import io.lamart.optics.async.switching
 import io.lamart.optics.async.toActions
-import io.lamart.optics.source.SourcedOptional
-import io.lamart.optics.source.SourcedSetter
-import io.lamart.optics.source.toNullableProperty
-import io.lamart.optics.source.toSource
+import io.lamart.optics.source.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 
@@ -30,7 +27,6 @@ class OpticsExample {
     ) {
         companion object : OpticsFactory<Person> {
             val name = lensOf({ name }, { copy(name = it) })
-            val age = lensOf({ age }, { copy(age = it) })
             val friends = lensOf({ friends }, { copy(friends = it) })
         }
     }
@@ -59,10 +55,13 @@ class OpticsExample {
     }
 
     fun friend() {
-        val friend: SourcedOptional<State, Person> = source
+        val source: SourcedOptional<State, Person> = source
             .compose(State.person)
             .compose(Person.friends)
             .compose(listOptionalOf { name == "Danny" })
+        var friend by source.toNullableProperty()
+
+        friend
     }
 
     fun friends() {
@@ -79,7 +78,6 @@ class OpticsExample {
             .compose(Auth.Authenticated.user)
             .compose(Person.name)
             .toNullableProperty()
-
     }
 
     fun authenticating() = runTest {

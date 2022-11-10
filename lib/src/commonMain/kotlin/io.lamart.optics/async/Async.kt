@@ -49,7 +49,7 @@ fun <P, T> Async.Companion.actionsOf(
 
 fun <P, T> SourcedSetter<*, Async<T>>.toActions(
     behavior: Behavior<P, T>,
-    scope: CoroutineScope,
+    scope: CoroutineScope = GlobalScope,
     effect: Effect<Async<T>> = effectOf()
 ): Actions<P> =
     Async.actionsOf(this, behavior, scope, effect, MutableSharedFlow<P>().toPipe())
