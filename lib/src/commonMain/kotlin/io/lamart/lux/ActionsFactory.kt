@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
-internal class ActionsFactory<I, O, A>constructor(
+class ActionsFactory<I, O, A> internal constructor(
     val onStart: (Flow<Signal<I, O>>) -> Flow<A>,
     val onStop: (Throwable) -> Unit,
     val onReset: () -> Unit

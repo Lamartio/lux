@@ -50,7 +50,12 @@ kotlin {
 android {
     namespace = "io.lamart.lux"
     compileSdk = 33
+    buildToolsVersion = "30.0.3"
     defaultConfig {
         minSdk = 27
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }

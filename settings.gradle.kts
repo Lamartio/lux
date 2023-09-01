@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "lux"
-include(":shared")
+rootProject.name = "Lux"
+include(":lib")

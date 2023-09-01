@@ -36,8 +36,8 @@ class Mutable<S : Any>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProper
 
     companion object {
         operator fun <S : Any> invoke(value: S): Mutable<S> {
-            var value = value
-            return Mutable({ value }, { value = it })
+            var state = value
+            return Mutable({ state }, { state = it })
         }
     }
 }
