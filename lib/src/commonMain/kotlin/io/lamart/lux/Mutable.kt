@@ -42,8 +42,5 @@ class Mutable<S : Any>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProper
     }
 }
 
-fun <S : Any> S.asMutable(): Mutable<S> =
-    MutableStateFlow(this).asMutable()
-
 fun <S : Any> MutableStateFlow<S>.asMutable(): Mutable<S> =
-    Mutable({ this@asMutable.value }, { tryEmit(it) })
+    Mutable(this@asMutable::value, ::tryEmit)
