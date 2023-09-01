@@ -14,11 +14,6 @@ class Mutable<S : Any>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProper
     fun modify(map: (S) -> S): Unit =
         get().let(map).let(set)
 
-    val lens: FocusedLens.Instance<S, S>
-        get() = Lens.id<S>()
-            .let(::compose)
-            .let { FocusedLens.Instance(it) }
-
     infix fun <A> compose(lens: Lens<S, A>): FocusedLens<S, A> =
         object : FocusedLens<S, A> {
             override val source: Mutable<S> = this@Mutable

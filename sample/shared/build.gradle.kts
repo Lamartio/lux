@@ -29,7 +29,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":lib"))
-                //put your multiplatform dependencies here
             }
         }
         val commonTest by getting {
