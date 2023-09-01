@@ -26,5 +26,5 @@ val <I, O> FocusedSetter<*, Async<I, O>>.toAsyncActions: ActionsFactory<I, O, As
                 else async
             }
         },
-        onReset = { set(Async.Idle()) }
+        onReset = { set(Async.Idle) }
     )

@@ -1,6 +1,5 @@
 package io.lamart.lux
 
-import arrow.core.identity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
-class ActionsFactory<I, O, A> internal constructor(
+internal class ActionsFactory<I, O, A>constructor(
     val onStart: (Flow<Signal<I, O>>) -> Flow<A>,
     val onStop: (Throwable) -> Unit,
     val onReset: () -> Unit
@@ -21,7 +20,7 @@ class ActionsFactory<I, O, A> internal constructor(
     operator fun invoke(
         scope: CoroutineScope,
         behavior: Behavior<I, O>,
-        effect: (Flow<A>) -> Flow<*> = ::identity
+        effect: (Flow<A>) -> Flow<*> = { it }
     ): Actions<I> {
         val channel = Channel<I>()
         val actionsJob = scope.coroutineContext[Job].let(::SupervisorJob).let { parent ->
