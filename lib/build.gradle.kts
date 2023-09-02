@@ -32,9 +32,9 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(platform("io.arrow-kt:arrow-stack:1.2.0-RC"))
-                implementation("io.arrow-kt:arrow-core")
-                implementation("io.arrow-kt:arrow-optics")
+                api(platform("io.arrow-kt:arrow-stack:1.2.0-RC"))
+                api("io.arrow-kt:arrow-core")
+                api("io.arrow-kt:arrow-optics")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
             }
         }

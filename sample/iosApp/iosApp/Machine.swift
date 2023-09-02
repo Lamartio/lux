@@ -24,7 +24,7 @@ class Machine<Output, Actions>: ObservableObject {
     
     func compose<O: Equatable>(state transform: @escaping (Output) -> O) -> Machine<O, Actions> {
         return Machine<O, Actions>(
-            publisher: publisher.map(transform).removeDuplicates().eraseToAnyPublisher(),
+            publisher: publisher.map(transform).eraseToAnyPublisher(),
             getState: { transform(self.getState()) },
             actions: actions
         )
@@ -39,11 +39,15 @@ class Machine<Output, Actions>: ObservableObject {
     }
     
     func compose<O: Equatable, A>(state: @escaping (Output) -> O, actions: (Actions) -> A) -> Machine<O, A> {
-        return compose(state: state).compose(actions: actions)
+        return Machine<O, A>(
+            publisher: publisher.map(state).eraseToAnyPublisher(),
+            getState: { state(self.getState()) },
+            actions: actions(self.actions)
+        )
     }
     
     func compose<O: Equatable, A>(_ tuple: (state: (Output) -> O, actions: (Actions) -> A)) -> Machine<O, A> {
         let (state, actions) = tuple
-        return compose(state: state).compose(actions: actions)
+        return compose(state: state, actions: actions)
     }
 }

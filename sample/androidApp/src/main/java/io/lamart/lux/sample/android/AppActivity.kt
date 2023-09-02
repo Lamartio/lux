@@ -8,18 +8,19 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.lamart.lux.sample.Greeting
+import io.lamart.lux.sample.AppActions
+import io.lamart.lux.sample.AppState
 
-class MainActivity : ComponentActivity() {
+class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationTheme {
+            AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    GreetingView(Greeting().greet())
+                    CounterView(machine = app.machine.compose(AppState::count, AppActions::counter))
                 }
             }
         }
@@ -33,8 +34,8 @@ fun GreetingView(text: String) {
 
 @Preview
 @Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
+private fun DefaultPreview() {
+    AppTheme {
         GreetingView("Hello, Android!")
     }
 }
