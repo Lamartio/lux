@@ -1,4 +1,4 @@
-package io.lamart.tenx.lux.focus
+package io.lamart.lux.focus
 
 import arrow.optics.Getter
 import arrow.optics.Lens
@@ -6,7 +6,7 @@ import arrow.optics.Optional
 import arrow.optics.Setter
 import io.lamart.lux.Mutable
 
-interface FocusedLens<S : Any, A> : Focused<S>, FocusedGetter<S, A>, FocusedSetter<S, A>,
+interface FocusedLens<S, A> : Focused<S>, FocusedGetter<S, A>, FocusedSetter<S, A>,
     FocusedOptional<S, A> {
     val lens: Lens<S, A>
 
@@ -23,6 +23,4 @@ interface FocusedLens<S : Any, A> : Focused<S>, FocusedGetter<S, A>, FocusedSett
     }
 
     operator fun <B> plus(other: Lens<A, B>) = compose(other)
-
-    class Instance<S : Any, A : Any>(focus: FocusedLens<S, A>) : FocusedLens<S, A> by focus
 }

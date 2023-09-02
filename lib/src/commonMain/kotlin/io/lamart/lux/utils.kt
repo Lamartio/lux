@@ -10,7 +10,7 @@ import arrow.optics.Optional
 import arrow.optics.PLens
 import arrow.optics.Prism
 import arrow.optics.Setter
-import io.lamart.tenx.lux.focus.FocusedLens
+import io.lamart.lux.focus.FocusedLens
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +22,7 @@ fun <S, A> lensOf(get: S.() -> A, set: S.(A) -> S): Lens<S, A> {
     return Lens.invoke(get, set)
 }
 
-fun <S : Any> prismOfNull(): Prism<S?, S> =
+fun <S> prismOfNull(): Prism<S?, S> =
     Prism(
         getOrModify = { Option.fromNullable(it).toEither { it } },
         reverseGet = { it } // the use of ::identity will cause the compiler to get stuck (linkdebugframework)
@@ -33,7 +33,7 @@ fun <S, A : S> prismOf(cast: (source: S) -> A?): Prism<S, A> = Prism(
     reverseGet = { it }
 )
 
-inline fun <S : Any, reified A : S> prism(): Prism<S, A> =
+inline fun <S, reified A : S> prism(): Prism<S, A> =
     object : Prism<S, A> {
         override fun getOrModify(source: S): Either<S, A> =
             (source as? A)?.right() ?: source.left()
@@ -48,7 +48,7 @@ fun <S, A> ((S) -> A).lens(copy: S.(A) -> S): Lens<S, A> {
     )
 }
 
-fun <S : Any, A> MutableStateFlow<S>.compose(lens: Lens<S, A>): FocusedLens<S, A> =
+fun <S, A> MutableStateFlow<S>.compose(lens: Lens<S, A>): FocusedLens<S, A> =
     object : FocusedLens<S, A> {
         override val source: Mutable<S> = Mutable(
             get = { this@compose.value },

@@ -4,15 +4,18 @@ import arrow.optics.Getter
 import arrow.optics.Lens
 import arrow.optics.Optional
 import arrow.optics.Setter
-import io.lamart.tenx.lux.focus.FocusedLens
+import io.lamart.lux.focus.FocusedLens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class Mutable<S : Any>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProperty<Nothing?, S> {
+class Mutable<S>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProperty<Nothing?, S> {
 
     fun modify(map: (S) -> S): Unit =
         get().let(map).let(set)
+
+    val lens: FocusedLens<S, S>
+        get() = Lens.id<S>().let(::compose)
 
     infix fun <A> compose(lens: Lens<S, A>): FocusedLens<S, A> =
         object : FocusedLens<S, A> {
@@ -30,12 +33,12 @@ class Mutable<S : Any>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProper
     override operator fun setValue(thisRef: Nothing?, property: KProperty<*>, value: S) = set(value)
 
     companion object {
-        operator fun <S : Any> invoke(value: S): Mutable<S> {
+        operator fun <S> invoke(value: S): Mutable<S> {
             var state = value
             return Mutable({ state }, { state = it })
         }
     }
 }
 
-fun <S : Any> MutableStateFlow<S>.asMutable(): Mutable<S> =
-    Mutable(this@asMutable::value, ::tryEmit)
+fun <S> MutableStateFlow<S>.asMutable(): Mutable<S> =
+    Mutable(::value, ::tryEmit)

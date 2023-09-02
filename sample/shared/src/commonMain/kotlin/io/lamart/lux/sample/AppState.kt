@@ -3,7 +3,7 @@ package io.lamart.lux.sample
 import io.lamart.lux.Async
 import io.lamart.lux.Mutable
 import io.lamart.lux.lens
-import io.lamart.tenx.lux.focus.FocusedSetter
+import io.lamart.lux.focus.FocusedSetter
 
 data class AppState(val fetching: Async<Int, String> = Async.Idle, val count: Int = 0) {
     companion object {

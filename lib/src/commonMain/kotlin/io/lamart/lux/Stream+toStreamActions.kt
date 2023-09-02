@@ -1,7 +1,7 @@
 package io.lamart.lux
 
 import arrow.core.some
-import io.lamart.tenx.lux.focus.FocusedSetter
+import io.lamart.lux.focus.FocusedSetter
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.runningFold
 

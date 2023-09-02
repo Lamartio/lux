@@ -1,11 +1,11 @@
-package io.lamart.tenx.lux.focus
+package io.lamart.lux.focus
 
 import arrow.core.Either
 import arrow.optics.Optional
 import arrow.optics.Setter
 import io.lamart.lux.Mutable
 
-interface FocusedOptional<S: Any, A> : Focused<S>, FocusedSetter<S, A> {
+interface FocusedOptional<S, A> : Focused<S>, FocusedSetter<S, A> {
     val optional: Optional<S, A>
 
     fun getOrModify(): Either<S, A> = optional.getOrModify(source.get())
@@ -20,6 +20,6 @@ interface FocusedOptional<S: Any, A> : Focused<S>, FocusedSetter<S, A> {
         }
     }
 
-    operator fun <B> plus(other: Optional<A,B>) = compose(other)
+    operator fun <B> plus(other: Optional<A, B>) = compose(other)
 
 }

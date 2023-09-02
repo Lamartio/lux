@@ -1,9 +1,9 @@
-package io.lamart.tenx.lux.focus
+package io.lamart.lux.focus
 
 import arrow.optics.Setter
 import io.lamart.lux.Mutable
 
-interface FocusedSetter<S: Any, A> : Focused<S> {
+interface FocusedSetter<S, A> : Focused<S> {
     val setter: Setter<S, A>
 
     fun set(focus: A) = source.modify { setter.set(it, focus) }

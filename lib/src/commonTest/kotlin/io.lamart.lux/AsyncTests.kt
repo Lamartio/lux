@@ -70,7 +70,7 @@ class AsyncTests {
 
 }
 
-fun <S : Any> S.asTestMutable(): Pair<MutableList<S>, Mutable<S>> {
+fun <S> S.asTestMutable(): Pair<MutableList<S>, Mutable<S>> {
     val results = mutableListOf(this@asTestMutable)
     val mutable = Mutable(results::last, results::add)
 

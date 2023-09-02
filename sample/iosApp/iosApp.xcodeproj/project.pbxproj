@@ -12,6 +12,7 @@
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		2CBE70322AA25E6B00F77F16 /* Machine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE70312AA25E6A00F77F16 /* Machine.swift */; };
 		2CBE70342AA25E8000F77F16 /* Machine+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE70332AA25E8000F77F16 /* Machine+utils.swift */; };
+		2CBE70362AA2656D00F77F16 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE70352AA2656D00F77F16 /* CounterView.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +35,7 @@
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
 		2CBE70312AA25E6A00F77F16 /* Machine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Machine.swift; sourceTree = "<group>"; };
 		2CBE70332AA25E8000F77F16 /* Machine+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Machine+utils.swift"; sourceTree = "<group>"; };
+		2CBE70352AA2656D00F77F16 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				058557D7273AAEEB004C7B11 /* Preview Content */,
 				2CBE70312AA25E6A00F77F16 /* Machine.swift */,
 				2CBE70332AA25E8000F77F16 /* Machine+utils.swift */,
+				2CBE70352AA2656D00F77F16 /* CounterView.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 				2CBE70322AA25E6B00F77F16 /* Machine.swift in Sources */,
 				2CBE70342AA25E8000F77F16 /* Machine+utils.swift in Sources */,
+				2CBE70362AA2656D00F77F16 /* CounterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
