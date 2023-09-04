@@ -40,5 +40,5 @@ class Mutable<S>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProperty<Not
     }
 }
 
-fun <S> MutableStateFlow<S>.asMutable(): Mutable<S> =
+fun <S> MutableStateFlow<S>.toMutable(): Mutable<S> =
     Mutable(::value, ::tryEmit)

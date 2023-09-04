@@ -20,10 +20,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.lamart.lux.Machine
+import io.lamart.lux.sample.ClockActions
 import io.lamart.lux.sample.CounterActions
 
 @Composable
-fun CounterView(machine: Machine<Int, CounterActions>) {
+fun Clock(machine: Machine<Int, ClockActions>) {
     val text by machine.compose(state = Int::toString).collectAsState()
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -34,7 +35,7 @@ fun CounterView(machine: Machine<Int, CounterActions>) {
             OutlinedTextField(
                 value = text,
                 onValueChange = { },
-                label = { Text("Counter") },
+                label = { Text("Clock") },
             )
 
             // workaround for disabling interaction without altering its theme.
@@ -42,11 +43,11 @@ fun CounterView(machine: Machine<Int, CounterActions>) {
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = machine.actions::decrement) {
-                Text(text = "-")
+            Button(onClick = { machine.actions.start(Unit) }) {
+                Text(text = "start")
             }
-            Button(onClick = machine.actions::increment) {
-                Text(text = "+")
+            Button(onClick = machine.actions::stop) {
+                Text(text = "stop")
             }
         }
     }

@@ -1,19 +1,15 @@
 import SwiftUI
 import shared
-import Combine
 
-struct CounterView: View {
+// A preview of starting and stopping an asynchronous function
+struct ClockView: View {
     
-    var counter: LuxMachine<KotlinInt, CounterActions>
+    var clock: LuxMachine<KotlinInt, ClockActions>
     @State private var text: String = ""
-    
-    init(counter: LuxMachine<KotlinInt, CounterActions>) {
-        self.counter = counter
-    }
     
     var body: some View {
         VStack(alignment: .center) {
-            Label("Counter", systemImage: "number")
+            Label("Clock", systemImage: "clock")
                 .labelStyle(.titleOnly)
             
             TextField("Number", text: $text)
@@ -22,14 +18,12 @@ struct CounterView: View {
                 .disabled(true)
             
             HStack {
-                Button("-", action: counter.actions.decrement)
+                Button("start", action: { clock.actions.start(input: KotlinUnit()) })
                     .buttonStyle(.borderedProminent)
-                Button("+", action: counter.actions.increment)
+                Button("stop", action: clock.actions.stop)
                     .buttonStyle(.borderedProminent)
             }
         }
-        .onReceive(MachinePublisher(machine: counter), perform: { count in text = count.stringValue })
+//        .onReceive(clock.$state, perform: { count in text = String(count) })
     }
 }
-
-

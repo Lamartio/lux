@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-val <I, O> FocusedSetter<*, Async<I, O>>.toAsyncActions: ActionsFactory<I, O, Async<I, O>>
+val <I : Any, O : Any> FocusedSetter<*, Async<I, O>>.toAsyncActions: ActionsFactory<I, O, Async<I, O>>
     get() = ActionsFactory(
         onStart = { flow ->
             flow
@@ -26,5 +26,5 @@ val <I, O> FocusedSetter<*, Async<I, O>>.toAsyncActions: ActionsFactory<I, O, As
                 else async
             }
         },
-        onReset = { set(Async.Idle) }
+        onReset = { set(Async.Idle()) }
     )

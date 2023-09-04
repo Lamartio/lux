@@ -20,15 +20,24 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
+//        it.binaries.framework {
+//            baseName = "shared"
+//        }
+
+        it.binaries {
+            framework {
+                baseName = "shared"
+            }
+            sharedLib {
+                export(project(":lux"))
+            }
         }
     }
-
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(project(":lib"))
+                api(project(":lux"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
             }
         }
         val commonTest by getting {

@@ -3,17 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
-		2CBE70322AA25E6B00F77F16 /* Machine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE70312AA25E6A00F77F16 /* Machine.swift */; };
-		2CBE70342AA25E8000F77F16 /* Machine+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE70332AA25E8000F77F16 /* Machine+utils.swift */; };
+		2C6878122AA6177B00991CBE /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6878112AA6177B00991CBE /* ClockView.swift */; };
+		2C6878142AA6512000991CBE /* MachinePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6878132AA6512000991CBE /* MachinePublisher.swift */; };
 		2CBE70362AA2656D00F77F16 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE70352AA2656D00F77F16 /* CounterView.swift */; };
-		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,11 +32,10 @@
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
-		2CBE70312AA25E6A00F77F16 /* Machine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Machine.swift; sourceTree = "<group>"; };
-		2CBE70332AA25E8000F77F16 /* Machine+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Machine+utils.swift"; sourceTree = "<group>"; };
+		2C6878112AA6177B00991CBE /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
+		2C6878132AA6512000991CBE /* MachinePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachinePublisher.swift; sourceTree = "<group>"; };
 		2CBE70352AA2656D00F77F16 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,13 +79,12 @@
 			isa = PBXGroup;
 			children = (
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
-				7555FF82242A565900829871 /* ContentView.swift */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iOSApp.swift */,
 				058557D7273AAEEB004C7B11 /* Preview Content */,
-				2CBE70312AA25E6A00F77F16 /* Machine.swift */,
-				2CBE70332AA25E8000F77F16 /* Machine+utils.swift */,
 				2CBE70352AA2656D00F77F16 /* CounterView.swift */,
+				2C6878112AA6177B00991CBE /* ClockView.swift */,
+				2C6878132AA6512000991CBE /* MachinePublisher.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -127,8 +124,9 @@
 		7555FF73242A565900829871 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = orgName;
 				TargetAttributes = {
 					7555FF7A242A565900829871 = {
@@ -191,10 +189,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C6878142AA6512000991CBE /* MachinePublisher.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
-				7555FF83242A565900829871 /* ContentView.swift in Sources */,
-				2CBE70322AA25E6B00F77F16 /* Machine.swift in Sources */,
-				2CBE70342AA25E8000F77F16 /* Machine+utils.swift in Sources */,
+				2C6878122AA6177B00991CBE /* ClockView.swift in Sources */,
 				2CBE70362AA2656D00F77F16 /* CounterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,7 +250,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -308,7 +305,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

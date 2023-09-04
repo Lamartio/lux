@@ -5,7 +5,7 @@ import io.lamart.lux.focus.FocusedSetter
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.runningFold
 
-val <I, O> FocusedSetter<*, Stream<I, O>>.toStreamActions: ActionsFactory<I, O, Stream<I, O>>
+val <I: Any, O: Any> FocusedSetter<*, Stream<I, O>>.toStreamActions: ActionsFactory<I, O, Stream<I, O>>
     get() = ActionsFactory(
         onStart = { flow ->
             flow

@@ -13,7 +13,7 @@ import kotlin.test.assertTrue
 
 class AsyncTests {
 
-    data class State(val fetching: Async<Int, String> = Async.Idle)
+    data class State(val fetching: Async<Int, String> = Async.Idle())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -35,7 +35,7 @@ class AsyncTests {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun cancelOngoingAction() = runTest {
-        val (results, mutable) = Async.Idle.asTestMutable<Async<Int, String>>()
+        val (results, mutable) = Async.Idle<Int, String>().asTestMutable<Async<Int, String>>()
         val actions = mutable.lens.toAsyncActions(this, Behavior.switching(suspension = {
             delay(1000)
             it.toString()
