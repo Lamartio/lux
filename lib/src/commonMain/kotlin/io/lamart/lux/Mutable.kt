@@ -14,8 +14,7 @@ class Mutable<S>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProperty<Not
     fun modify(map: (S) -> S): Unit =
         get().let(map).let(set)
 
-    val lens: FocusedLens<S, S>
-        get() = Lens.id<S>().let(::compose)
+    val lens: FocusedLens<S, S> = compose(Lens.id())
 
     infix fun <A> compose(lens: Lens<S, A>): FocusedLens<S, A> =
         object : FocusedLens<S, A> {

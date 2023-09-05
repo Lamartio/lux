@@ -1,19 +1,19 @@
 package io.lamart.lux
 
-import arrow.core.some
 import io.lamart.lux.focus.FocusedSetter
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.runningFold
 
-val <I: Any, O: Any> FocusedSetter<*, Stream<I, O>>.toStreamActions: ActionsFactory<I, O, Stream<I, O>>
+val <I : Any, O : Any> FocusedSetter<*, Stream<I, O>>.toStreamActions: ActionsFactory<I, O, Stream<I, O>>
     get() = ActionsFactory(
         onStart = { flow ->
             flow
                 .runningFold<Signal<I, O>, Stream<I, O>>(Stream()) { stream, signal ->
                     when (signal) {
                         is Signal.Start -> Stream(state = Async.Executing(signal.input))
-                        is Signal.Next -> stream.copy(result = signal.output.some())
-                        is Signal.End -> signal.reason?.let { stream.copy(state = Async.Failure(it)) }
+                        is Signal.Next -> stream.copy(result = signal.output)
+                        is Signal.End -> signal.reason
+                            ?.let { stream.copy(state = Async.Failure(it)) }
                             ?: stream.copy(state = Async.Success(Unit))
                     }
                 }
