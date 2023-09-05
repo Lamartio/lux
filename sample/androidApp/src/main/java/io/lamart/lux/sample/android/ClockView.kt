@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
@@ -20,12 +19,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.lamart.lux.Machine
+import io.lamart.lux.sample.AppMachine
 import io.lamart.lux.sample.ClockActions
-import io.lamart.lux.sample.CounterActions
 
 @Composable
-fun Clock(machine: Machine<Int, ClockActions>) {
+fun ClockView(machine: Machine<Int, ClockActions>) {
     val text by machine.compose(state = Int::toString).collectAsState()
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp, CenterVertically),
@@ -57,6 +57,6 @@ fun Clock(machine: Machine<Int, ClockActions>) {
 @Composable
 private fun DefaultPreview() {
     AppTheme {
-//        CounterView(machine = AppMachine().compose(AppState::count, AppActions::counter))
+        ClockView(machine = AppMachine().clock)
     }
 }

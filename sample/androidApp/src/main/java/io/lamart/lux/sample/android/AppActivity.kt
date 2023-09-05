@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
@@ -30,7 +29,7 @@ class AppActivity : ComponentActivity() {
                         Column(verticalArrangement = Arrangement.Center) {
                             CounterView(app.machine.counter)
                             Divider(Modifier.padding(8.dp))
-                            Clock(machine = app.machine.clock)
+                            ClockView(machine = app.machine.clock)
                         }
                     }
                 )

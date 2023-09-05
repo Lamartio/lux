@@ -6,7 +6,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
@@ -38,14 +38,12 @@ class ActionsFactory<I: Any, O, A> internal constructor(
 
             override fun start(input: I) {
                 if (!job.isActive) {
-                    job = this.scope.launch {
-                        channel
-                            .receiveAsFlow()
-                            .let(behavior)
-                            .let(onStart)
-                            .let(effect)
-                            .collect()
-                    }
+                    job = channel
+                        .receiveAsFlow()
+                        .let(behavior)
+                        .let(onStart)
+                        .let(effect)
+                        .launchIn(this.scope)
                 }
 
                 this.scope.plus(job).launch {
