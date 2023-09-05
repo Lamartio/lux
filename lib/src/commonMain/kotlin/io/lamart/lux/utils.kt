@@ -12,6 +12,7 @@ import arrow.optics.Prism
 import arrow.optics.Setter
 import io.lamart.lux.focus.FocusedLens
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
@@ -47,19 +48,6 @@ fun <S, A> ((S) -> A).lens(copy: S.(A) -> S): Lens<S, A> {
         set = copy
     )
 }
-
-fun <S, A> MutableStateFlow<S>.compose(lens: Lens<S, A>): FocusedLens<S, A> =
-    object : FocusedLens<S, A> {
-        override val source: Mutable<S> = Mutable(
-            get = { this@compose.value },
-            set = { this@compose.value = it }
-        )
-        override val getter: Getter<S, A> = lens
-        override val setter: Setter<S, A> = lens
-        override val optional: Optional<S, A> = lens
-        override val lens: Lens<S, A> = lens
-    }
-
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal fun <T> Flow<T>.prepend(vararg values: T): Flow<T> =

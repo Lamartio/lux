@@ -10,6 +10,8 @@ open class Machine<S : Any, A : Any>(
     val actions: A
 ) : StateFlow<S> by state {
 
+    val collectible get() = Collectible(scope, state)
+
     constructor(machine: Machine<S, A>) : this(
         machine.scope,
         machine.state,
@@ -26,17 +28,6 @@ open class Machine<S : Any, A : Any>(
 
     fun <T : Any, B : Any> compose(state: (S) -> T, actions: (A) -> B): Machine<T, B> =
         Machine(scope, this.state.compose(state), this.actions.let(actions))
-
-    /**
-     * Errors can be collected through CoroutineExceptionHandler in the CoroutineScope
-     * @return a cancel function
-     */
-    fun collect(onEach: (S) -> Unit, onCompletion: () -> Unit): () -> Unit =
-        state
-            .onEach(onEach)
-            .onCompletion { onCompletion() }
-            .launchIn(scope)
-            .run { { cancel(null) } }
 
     companion object
 }

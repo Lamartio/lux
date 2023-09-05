@@ -10,8 +10,8 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
+		2C3BCB8E2AA73A0000CD056D /* LuxHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3BCB8D2AA73A0000CD056D /* LuxHelpers.swift */; };
 		2C6878122AA6177B00991CBE /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6878112AA6177B00991CBE /* ClockView.swift */; };
-		2C6878142AA6512000991CBE /* MachinePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6878132AA6512000991CBE /* MachinePublisher.swift */; };
 		2CBE70362AA2656D00F77F16 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE70352AA2656D00F77F16 /* CounterView.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,8 +32,8 @@
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
+		2C3BCB8D2AA73A0000CD056D /* LuxHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuxHelpers.swift; sourceTree = "<group>"; };
 		2C6878112AA6177B00991CBE /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
-		2C6878132AA6512000991CBE /* MachinePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachinePublisher.swift; sourceTree = "<group>"; };
 		2CBE70352AA2656D00F77F16 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,7 +84,7 @@
 				058557D7273AAEEB004C7B11 /* Preview Content */,
 				2CBE70352AA2656D00F77F16 /* CounterView.swift */,
 				2C6878112AA6177B00991CBE /* ClockView.swift */,
-				2C6878132AA6512000991CBE /* MachinePublisher.swift */,
+				2C3BCB8D2AA73A0000CD056D /* LuxHelpers.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -189,8 +189,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C6878142AA6512000991CBE /* MachinePublisher.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
+				2C3BCB8E2AA73A0000CD056D /* LuxHelpers.swift in Sources */,
 				2C6878122AA6177B00991CBE /* ClockView.swift in Sources */,
 				2CBE70362AA2656D00F77F16 /* CounterView.swift in Sources */,
 			);

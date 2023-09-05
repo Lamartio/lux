@@ -1,7 +1,7 @@
 import SwiftUI
 import shared
 
-// A preview of starting and stopping an asynchronous function
+// A preview for starting and stopping an asynchronous function
 struct ClockView: View {
     
     var clock: LuxMachine<KotlinInt, ClockActions>
@@ -24,6 +24,6 @@ struct ClockView: View {
                     .buttonStyle(.borderedProminent)
             }
         }
-//        .onReceive(clock.$state, perform: { count in text = String(count) })
+        .onReceive(values(from: clock, \.stringValue), perform: { text = $0 })
     }
 }
