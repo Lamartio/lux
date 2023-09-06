@@ -1,4 +1,4 @@
-package io.lamart.lux
+package io.lamart.lux.actions
 
 interface Actions<I: Any> {
     fun start(input: I)

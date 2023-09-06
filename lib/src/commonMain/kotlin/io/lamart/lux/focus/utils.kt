@@ -1,26 +1,15 @@
-package io.lamart.lux
+package io.lamart.lux.focus
 
 import arrow.core.Either
 import arrow.core.Option
 import arrow.core.left
 import arrow.core.right
-import arrow.optics.Getter
 import arrow.optics.Lens
-import arrow.optics.Optional
 import arrow.optics.PLens
 import arrow.optics.Prism
-import arrow.optics.Setter
-import io.lamart.lux.focus.FocusedLens
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flattenConcat
-import kotlinx.coroutines.flow.flowOf
 
 fun <S, A> lensOf(get: S.() -> A, set: S.(A) -> S): Lens<S, A> {
-    return Lens.invoke(get, set)
+    return PLens.invoke(get, set)
 }
 
 fun <S> prismOfNull(): Prism<S?, S> =
@@ -48,11 +37,3 @@ fun <S, A> ((S) -> A).lens(copy: S.(A) -> S): Lens<S, A> {
         set = copy
     )
 }
-
-@OptIn(ExperimentalCoroutinesApi::class)
-internal fun <T> Flow<T>.prepend(vararg values: T): Flow<T> =
-    listOf(flowOf(*values), this).asFlow().flattenConcat()
-
-@OptIn(ExperimentalCoroutinesApi::class)
-internal fun <T> Flow<T>.append(vararg values: T): Flow<T> =
-    listOf(this, flowOf(*values)).asFlow().flattenConcat()

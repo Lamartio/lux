@@ -1,5 +1,7 @@
-package io.lamart.lux
+package io.lamart.lux.actions
 
+import io.lamart.lux.Behavior
+import io.lamart.lux.Signal
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

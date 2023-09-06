@@ -2,16 +2,13 @@ package io.lamart.lux
 
 import arrow.optics.Lens
 import io.lamart.lux.focus.FocusedLens
+import io.lamart.lux.focus.lensOf
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.expect
 
 data class AppState(val count: Int = 0)
 
