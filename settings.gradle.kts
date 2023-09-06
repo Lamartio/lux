@@ -14,4 +14,8 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Lux"
-include(":lib")
+
+":lib".also { path ->
+    include(path)
+    project(path).name = "lux"
+}
