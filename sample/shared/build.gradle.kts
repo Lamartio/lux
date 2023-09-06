@@ -2,12 +2,12 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
 }
-
-repositories {
-    mavenLocal()
-    google()
-    mavenCentral()
-}
+//
+//repositories {
+//    mavenLocal()
+//    google()
+//    mavenCentral()
+//}
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {

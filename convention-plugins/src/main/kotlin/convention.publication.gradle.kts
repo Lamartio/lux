@@ -61,27 +61,26 @@ publishing {
 
         // Provide artifacts information requited by Maven Central
         pom {
-            name.set("MPP Sample library")
-            description.set("Sample Kotlin Multiplatform library (jvm + ios + js) test")
-            url.set("https://github.com/KaterinaPetrova/mpp-sample-lib")
+            name.set("Lux")
+            description.set("Shiny state management for Kotlin, Android & iOS")
+            url.set("https://github.com/Lamartio/lux")
 
             licenses {
                 license {
-                    name.set("MIT")
-                    url.set("https://opensource.org/licenses/MIT")
+                    name.set("GNU GPLv3")
+                    url.set("https://raw.githubusercontent.com/Lamartio/lux/main/LICENSE")
                 }
             }
             developers {
                 developer {
-                    id.set("KaterinaPetrova")
-                    name.set("Ekaterina Petrova")
-                    email.set("91kathrin@gmail.com")
+                    id.set("Lamartio")
+                    name.set("Danny Lamarti")
+                    email.set("lamarti.danny@gmail.com")
                 }
             }
             scm {
-                url.set("https://github.com/KaterinaPetrova/mpp-sample-lib")
+                url.set("https://github.com/Lamartio/lux")
             }
-
         }
     }
 }

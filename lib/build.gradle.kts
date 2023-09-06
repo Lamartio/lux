@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
-    id("maven-publish")
-//    id("convention.publication")
+//    id("maven-publish")
+    id("convention.publication")
 }
 
 group = "io.lamart"
@@ -28,7 +28,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(platform("io.arrow-kt:arrow-stack:1.2.0-RC"))
+                implementation(platform("io.arrow-kt:arrow-stack:1.2.0"))
                 api("io.arrow-kt:arrow-core")
                 api("io.arrow-kt:arrow-optics")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")

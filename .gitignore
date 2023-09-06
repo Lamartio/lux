@@ -9,6 +9,8 @@ captures
 local.properties
 xcuserdata
 
+secring.gpg
+
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,linux,intellij+all,kotlin,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,linux,intellij+all,kotlin,gradle
 
