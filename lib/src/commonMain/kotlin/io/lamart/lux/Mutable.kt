@@ -5,7 +5,9 @@ import arrow.optics.Lens
 import arrow.optics.Optional
 import arrow.optics.Setter
 import io.lamart.lux.focus.FocusedLens
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -41,3 +43,6 @@ class Mutable<S>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProperty<Not
 
 fun <S> MutableStateFlow<S>.toMutable(): Mutable<S> =
     Mutable(::value, ::tryEmit)
+
+fun <S> MutableStateFlow<S>.toMutable(scope: CoroutineScope): Mutable<S> =
+    Mutable(::value, { value -> scope.launch { emit(value) } })
