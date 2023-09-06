@@ -1,9 +1,7 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-
 plugins {
     kotlin("multiplatform")
-    id("com.android.library")
     id("maven-publish")
+//    id("convention.publication")
 }
 
 group = "io.lamart"
@@ -12,7 +10,13 @@ version = "0.5.0"
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
     targetHierarchy.default()
-    android()
+
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+    }
+
     ios {
         binaries {
             framework {
@@ -20,6 +24,7 @@ kotlin {
             }
         }
     }
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -35,17 +40,5 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
             }
         }
-    }
-}
-
-android {
-    namespace = "io.lamart.lux"
-    compileSdk = 29
-    defaultConfig {
-        minSdk = 24
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }

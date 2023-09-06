@@ -1,11 +1,12 @@
 package io.lamart.lux.sample
 
-import io.lamart.lux.Actions
 import io.lamart.lux.Behavior
+import io.lamart.lux.actions.Actions
+import io.lamart.lux.actions.toStreamActions
 import io.lamart.lux.focus.FocusedLens
 import io.lamart.lux.focus.FocusedSetter
-import io.lamart.lux.lens
-import io.lamart.lux.toStreamActions
+import io.lamart.lux.focus.lens
+import io.lamart.lux.focus.lensOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.onEach
 class AppActions internal constructor(scope: CoroutineScope, focus: FocusedLens<*, AppState>) {
 
     val counter = focus
-        .compose(AppState::count.lens { copy(count = it) })
+        .compose(lensOf(AppState::count, { copy(count = it) }))
         .let(::CounterActions)
 
     val clock = focus

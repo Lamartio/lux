@@ -14,6 +14,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Lux"
+includeBuild("convention-plugins")
 
 ":lib".also { path ->
     include(path)
