@@ -16,5 +16,5 @@ dependencyResolutionManagement {
 rootProject.name = "sample"
 include(":androidApp")
 include(":shared")
-include(":lux")
-project(":lux").projectDir = file("${rootDir.parent}/lib")
+//include(":lux")
+//project(":lux").projectDir = file("${rootDir.parent}/lib")

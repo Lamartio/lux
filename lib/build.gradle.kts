@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.lamart"
-version = "0.5.0"
+version = "0.5.1"
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
@@ -17,11 +17,13 @@ kotlin {
         }
     }
 
-    ios {
-        binaries {
-            framework {
-                baseName = "Lux"
-            }
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "Lux"
         }
     }
 
@@ -41,4 +43,11 @@ kotlin {
             }
         }
     }
+}
+
+// https://github.com/alllex/parsus/blob/main/build.gradle.kts
+// Without this there is a Gradle error (notice mismatch between publish task and sign names):
+// > Reason: Task ':publishIosArm64PublicationToMavenLocal' uses this output of task ':signIosX64Publication' without declaring an explicit or implicit dependency.
+tasks.withType<AbstractPublishToMaven>().configureEach {
+    mustRunAfter(tasks.withType<Sign>())
 }

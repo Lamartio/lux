@@ -46,8 +46,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(project(":lux"))
-//                implementation("io.lamart:lux:0.5.0")
+                api("io.lamart:lux:0.5.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
 
             }
