@@ -24,8 +24,8 @@ open class Machine<S : Any, A : Any>(
     constructor(
         value: S,
         actionsFactory: (CoroutineScope, FocusedLens<S, S>) -> A,
-        scope: CoroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob()),
-    ) : this(machineOf(value, scope, actionsFactory))
+        scope: CoroutineScope? = null,
+    ) : this(initialize(value, scope, actionsFactory))
 
     @JvmName("composeState")
     fun <T : Any> compose(state: (S) -> T): Machine<T, A> =
@@ -41,13 +41,14 @@ open class Machine<S : Any, A : Any>(
     companion object
 }
 
-private fun <S : Any, A : Any> machineOf(
+private fun <S : Any, A : Any> initialize(
     value: S,
-    scope: CoroutineScope,
+    scope: CoroutineScope?,
     actionsFactory: (CoroutineScope, FocusedLens<S, S>) -> A
 ): Machine<S, A> {
     val state = MutableStateFlow(value)
-    val mutable = state.toMutable(scope)
+    val mutable = state.toMutable()
+    val scope = scope ?: CoroutineScope(Dispatchers.Main + SupervisorJob())
     val actions = actionsFactory(scope, mutable.lens)
 
     return Machine(scope, state, actions)
@@ -64,4 +65,3 @@ private fun <T, R> StateFlow<T>.compose(transform: (value: T) -> R): StateFlow<R
         override suspend fun collect(collector: FlowCollector<R>): Nothing =
             this@compose.collect { value -> value.let(transform).let { collector.emit(it) } }
     }
-

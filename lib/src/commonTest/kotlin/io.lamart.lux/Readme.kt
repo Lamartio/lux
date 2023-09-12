@@ -35,7 +35,7 @@ class AppActionsCondensed(focus: FocusedLens<*, AppState>) {
     fun decrement() = countFocus.modify { it - 1 }
 }
 
-class AppMachine(scope: CoroutineScope) : Machine<AppState, AppActions>(
+class AppMachine(scope: CoroutineScope? = null) : Machine<AppState, AppActions>(
     value = AppState(),
     scope = scope,
     actionsFactory = { _, focus -> AppActions(focus) },
@@ -44,15 +44,13 @@ class AppMachine(scope: CoroutineScope) : Machine<AppState, AppActions>(
 @OptIn(ExperimentalCoroutinesApi::class)
 class Readme {
     @Test
-    fun incrementAndDecrement() = runTest {
-        val machine = AppMachine(this)
+    fun incrementAndDecrement()  {
+        val machine = AppMachine()
 
         assertEquals(machine.value.count, 0)
         machine.actions.increment()
-        advanceUntilIdle()
         assertEquals(machine.value.count, 1)
         machine.actions.decrement()
-        advanceUntilIdle()
         assertEquals(machine.value.count, 0)
     }
 
@@ -62,6 +60,7 @@ class Readme {
         val results = mutableListOf<AppState>()
         val job = launch { machine.toList(results) } // Machine implements StateFlow 🚀
 
+        advanceUntilIdle()
         machine.actions.increment()
         advanceUntilIdle()
         machine.actions.decrement()

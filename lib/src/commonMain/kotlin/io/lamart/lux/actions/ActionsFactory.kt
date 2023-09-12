@@ -2,18 +2,13 @@ package io.lamart.lux.actions
 
 import io.lamart.lux.Behavior
 import io.lamart.lux.Signal
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 
-class ActionsFactory<I: Any, O, A> internal constructor(
+class ActionsFactory<I : Any, O, A> internal constructor(
     val onStart: (Flow<Signal<I, O>>) -> Flow<A>,
     val onStop: (Throwable) -> Unit,
     val onReset: () -> Unit

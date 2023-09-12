@@ -17,11 +17,3 @@ interface FocusedGetter<S, A> : Focused<S> {
     operator fun <B> plus(other: Getter<A, B>) = compose(other)
 
 }
-
-fun <A, T : FocusedGetter<*, A>> T.record(block: T.() -> Unit): Pair<A, A> {
-    val before = get()
-    block(this)
-    val after = get()
-
-    return before to after
-}

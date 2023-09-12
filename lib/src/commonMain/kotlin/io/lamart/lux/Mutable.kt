@@ -41,5 +41,5 @@ class Mutable<S>(val get: () -> S, val set: (S) -> Unit) : ReadWriteProperty<Not
     }
 }
 
-fun <S> MutableStateFlow<S>.toMutable(scope: CoroutineScope?): Mutable<S> =
-    Mutable(::value, { value -> scope?.launch { emit(value) } ?: tryEmit(value) })
+fun <S> MutableStateFlow<S>.toMutable(): Mutable<S> =
+    Mutable(::value, { this.value = it })
