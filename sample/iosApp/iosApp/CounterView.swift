@@ -23,6 +23,6 @@ struct CounterView: View {
                     .buttonStyle(.borderedProminent)
             }
         }
-        .onReceive(values(from: counter, \.stringValue), perform: { text = $0 })
+        .onReceive(publisher(of: counter).map(\.stringValue), perform: { text = $0 })
     }
 }

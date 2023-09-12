@@ -21,39 +21,24 @@ kotlin {
         }
     }
 
-    ios {
-        binaries {
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries {
             framework {
                 baseName = "shared"
             }
         }
     }
 
-//    listOf(
-//        iosX64(),
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach {
-//        it.binaries {
-//            framework {
-//                baseName = "shared"
-//            }
-//            sharedLib {
-//                export(project(":lux"))
-//            }
-//        }
-//    }
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("io.lamart:lux:0.5.0")
+                api("io.lamart:lux:0.5.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
 
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
             }
         }
     }

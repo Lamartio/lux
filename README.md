@@ -103,7 +103,7 @@ P.S. These examples are available as tests, so you can run them yourself ;)
 
 # Backlog
 
-| TODO                              | DOING | DONE                                               |
-|-----------------------------------|-------|----------------------------------------------------|
-|                                   |       | Fix synchronicity bug in default Machine and tests |
-| Implement collectible in Machine. |       |                                                    |
+| TODO | DOING | DONE                                               |
+|------|-------|----------------------------------------------------|
+|      |       | Fix synchronicity bug in default Machine and tests |
+|      |       | Implement collectible in Machine.                  |                                                    

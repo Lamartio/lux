@@ -3,6 +3,7 @@ package io.lamart.lux
 import io.lamart.lux.focus.FocusedLens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.*
 import kotlin.jvm.JvmName
@@ -12,8 +13,6 @@ open class Machine<S : Any, A : Any>(
     private val state: StateFlow<S>,
     val actions: A
 ) : StateFlow<S> by state {
-
-    val collectible get() = Collectible(scope, state)
 
     constructor(machine: Machine<S, A>) : this(
         machine.scope,
@@ -38,8 +37,17 @@ open class Machine<S : Any, A : Any>(
     fun <T : Any, B : Any> compose(state: (S) -> T, actions: (A) -> B): Machine<T, B> =
         Machine(scope, this.state.compose(state), this.actions.let(actions))
 
+    fun collect(onEach: (S) -> Unit, onCompletion: (Throwable?) -> Unit): () -> Unit =
+        state
+            .onEach { onEach(it) }
+            .onCompletion { onCompletion(it) }
+            .launchIn(scope)
+            .asCancel()
+
     companion object
 }
+
+private fun Job.asCancel(): () -> Unit = { cancel(null) }
 
 private fun <S : Any, A : Any> initialize(
     value: S,

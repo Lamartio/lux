@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.lamart"
-version = "0.5.1"
+version = "0.5.2"
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {

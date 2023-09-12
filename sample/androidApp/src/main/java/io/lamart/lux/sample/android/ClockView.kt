@@ -43,7 +43,7 @@ fun ClockView(machine: Machine<Int, ClockActions>) {
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = { machine.actions.start(Unit) }) {
+            Button(onClick = { machine.actions.start() }) {
                 Text(text = "start")
             }
             Button(onClick = machine.actions::stop) {

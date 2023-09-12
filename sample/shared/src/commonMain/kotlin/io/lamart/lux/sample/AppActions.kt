@@ -28,8 +28,10 @@ class AppActions internal constructor(scope: CoroutineScope, focus: FocusedLens<
         .let(::ClockActions)
 }
 
-// Workaround to get a clear type in Swift
-class ClockActions(actions: Actions<Unit>) : Actions.Instance<Unit>(actions)
+class ClockActions(private val actions: Actions<Unit>) {
+    fun start() = actions.start(Unit)
+    fun stop() = actions.stop()
+}
 
 class CounterActions(private val focus: FocusedSetter<*, Int>) {
     fun increment() = focus.modify { it + 1 }

@@ -18,12 +18,12 @@ struct ClockView: View {
                 .disabled(true)
             
             HStack {
-                Button("start", action: { clock.actions.start(input: KotlinUnit()) })
+                Button("start", action: clock.actions.start)
                     .buttonStyle(.borderedProminent)
                 Button("stop", action: clock.actions.stop)
                     .buttonStyle(.borderedProminent)
             }
         }
-        .onReceive(values(from: clock, \.stringValue), perform: { text = $0 })
+        .onReceive(publisher(of: clock).map(\.stringValue), perform: { text = $0 })
     }
 }
