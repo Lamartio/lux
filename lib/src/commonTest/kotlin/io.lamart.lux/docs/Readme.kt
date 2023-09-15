@@ -1,6 +1,7 @@
-package io.lamart.lux
+package io.lamart.lux.docs
 
 import arrow.optics.Lens
+import io.lamart.lux.Machine
 import io.lamart.lux.focus.FocusedLens
 import io.lamart.lux.focus.lensOf
 import kotlinx.coroutines.*
