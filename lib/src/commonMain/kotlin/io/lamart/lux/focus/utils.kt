@@ -7,6 +7,7 @@ import arrow.core.right
 import arrow.optics.Lens
 import arrow.optics.PLens
 import arrow.optics.Prism
+import io.lamart.lux.Mutable
 
 fun <S, A> lensOf(get: S.() -> A, set: S.(A) -> S): Lens<S, A> {
     return PLens.invoke(get, set)
@@ -37,3 +38,10 @@ fun <S, A> ((S) -> A).lens(copy: S.(A) -> S): Lens<S, A> {
         set = copy
     )
 }
+
+fun <S> transaction(block: (focus: FocusedLens<*, S>) -> Unit): (S) -> S =
+    { value ->
+        Mutable(value)
+            .apply { block(lens) }
+            .get()
+    }
